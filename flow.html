@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>瑜珈頌缽細流表</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23E2A33A' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23E2A33A'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --apricot: #F7CD8E; --peach: #F2B49B; --lavender: #B8B4DE; --dusk: #5A5893;
+    --ink: #2B2A55; --ink-soft: #4C4B78; --gold: #D8962C; --amber: #9A5B1E;
+    --glass: rgba(255, 255, 255, .58); --glass-line: rgba(255, 255, 255, .75);
+    --todo: #FCE9C6; --line: rgba(90, 88, 147, .16); --line-strong: rgba(90, 88, 147, .38);
+    --serif: "Noto Serif TC", "Songti TC", "Source Han Serif TC", serif;
+    --sans: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { overflow-x: clip; }
+  body {
+    margin: 0; color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    background: linear-gradient(180deg, #FBE3C4 0%, #F6CDB4 22%, #E3C7DA 48%, #C5C2E6 72%, #A9AEDD 100%);
+    background-attachment: fixed; min-height: 100vh;
+  }
+  a { color: var(--ink); }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .aura { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .aura span { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .6; animation: drift 30s ease-in-out infinite alternate; }
+  .aura .a1 { width: 60vmax; height: 60vmax; left: -15vmax; top: -20vmax; background: radial-gradient(circle, #FFD99A, transparent 65%); }
+  .aura .a2 { width: 55vmax; height: 55vmax; right: -20vmax; top: 20vh; background: radial-gradient(circle, #F4A9A0, transparent 65%); animation-delay: -8s; }
+  .aura .a3 { width: 65vmax; height: 65vmax; left: 10vw; bottom: -30vmax; background: radial-gradient(circle, #9C9FE0, transparent 65%); animation-delay: -14s; }
+  @keyframes drift { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw,4vh) scale(1.12); } 100% { transform: translate(-4vw,8vh) scale(.95); } }
+
+  nav { position: sticky; top: 0; z-index: 20; background: rgba(255, 244, 232, .62); backdrop-filter: blur(14px) saturate(1.3); border-bottom: 1px solid var(--glass-line); }
+  nav .in { max-width: 1480px; margin: 0 auto; padding: 0 16px; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  nav a { flex: none; padding: 12px 12px; font-size: 15px; text-decoration: none; color: var(--ink-soft); white-space: nowrap; border-bottom: 2px solid transparent; }
+  nav a:hover { color: var(--gold); }
+  nav a[aria-current] { color: var(--ink); border-bottom-color: var(--gold); font-weight: 600; }
+
+  main { max-width: 1480px; margin: 0 auto; padding: 24px 16px 60px; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin-bottom: 14px; }
+  .kicker { font-family: var(--serif); color: var(--amber); margin: 0; font-size: 15px; }
+  h1 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 36px); line-height: 1.25; margin: 2px 0 0; letter-spacing: .03em; }
+  .save { font-size: 13px; color: var(--ink-soft); }
+  .save b { font-weight: 500; color: #4E7A47; }
+
+  /* toolbar */
+  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 14px 14px 0 0;
+    background: rgba(255, 255, 255, .7); border: 1px solid var(--glass-line); border-bottom: 1px solid var(--line); }
+  .btn { padding: 6px 13px; border-radius: 8px; border: 1px solid var(--line-strong); background: #fff; cursor: pointer; font-size: 14px; white-space: nowrap; }
+  .btn:hover { border-color: var(--ink); }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn.primary:hover { background: #3E3C78; }
+  .btn:disabled { opacity: .4; cursor: default; }
+  .sep { width: 1px; height: 22px; background: var(--line-strong); margin: 0 4px; }
+  .search { position: relative; flex: 1 1 200px; max-width: 280px; }
+  .search input { width: 100%; padding: 6px 30px 6px 11px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 14px; background: #fff; }
+  .search button { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border: 0; background: none; cursor: pointer; color: var(--ink-soft); padding: 2px 6px; display: none; }
+  .search.has button { display: block; }
+  .count { font-size: 13px; color: var(--ink-soft); }
+  .spacer { flex: 1; }
+
+  .people { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,.55); border-left: 1px solid var(--glass-line); border-right: 1px solid var(--glass-line); border-bottom: 1px solid var(--line); align-items: center; }
+  .people .lbl { font-size: 13px; color: var(--ink-soft); margin-right: 4px; }
+  .chip { font-size: 13px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line-strong); background: #fff; cursor: pointer; }
+  .chip:hover { border-color: var(--gold); }
+  .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .chip small { opacity: .65; margin-left: 3px; }
+
+  /* grid */
+  .wrap { overflow: auto; max-height: calc(100vh - 200px); min-height: 320px; background: #fff;
+    border: 1px solid var(--glass-line); border-top: 0; border-radius: 0 0 14px 14px; box-shadow: 0 20px 50px -30px rgba(60, 50, 120, .45); }
+  table { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1240px; table-layout: fixed; }
+  thead th { position: sticky; top: 0; z-index: 3; background: #EEEAF6; color: var(--ink); font-weight: 600; font-size: 14px; text-align: left;
+    padding: 8px 10px; border-bottom: 1px solid var(--line-strong); border-right: 1px solid var(--line); white-space: nowrap; }
+  thead th:last-child { border-right: 0; }
+  td { vertical-align: top; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0; position: relative; }
+  td:last-child { border-right: 0; }
+  tr.first td { border-top: 2px solid var(--line-strong); }
+  tbody tr:first-child td { border-top: 0; }
+  td.blk { background: #FBF7F1; }
+  tr.core td.blk { background: linear-gradient(100deg, #FFEBC9, #ECE6FA); }
+
+  .c { min-height: 36px; padding: 7px 10px; white-space: pre-wrap; word-break: break-word; outline: none; cursor: text; }
+  .c:hover { background: rgba(247, 205, 142, .14); }
+  .c:focus { background: #FFFCF4; box-shadow: inset 0 0 0 2px var(--gold); }
+  .c:empty::before { content: attr(data-ph); color: #B5B2CC; }
+  td.need .c:empty { background: var(--todo); }
+  td.need .c:empty::before { color: #A57A30; }
+  .c.time { font-family: var(--serif); font-size: 17px; font-variant-numeric: tabular-nums; color: var(--amber); }
+  .c.name { font-weight: 600; font-size: 15.5px; }
+  td.bad .c.time { color: #B4322A; box-shadow: inset 3px 0 0 #D9534A; }
+  .no { font-family: var(--serif); font-size: 17px; color: var(--dusk); padding: 7px 0 0; text-align: center; font-variant-numeric: tabular-nums; }
+  .sn { font-size: 12px; color: #A3A0C2; font-variant-numeric: tabular-nums; padding: 9px 0 0; text-align: center; }
+
+  .acts { display: flex; gap: 2px; padding: 5px 6px; opacity: 0; transition: opacity .12s; }
+  tr:hover .acts.item, tr:focus-within .acts.item { opacity: 1; }
+  tbody[data-b]:hover .acts.blk, tbody[data-b]:focus-within .acts.blk { opacity: 1; }
+  .acts.blk { flex-direction: column; align-items: center; padding: 6px 0; }
+  .ib { width: 26px; height: 26px; border-radius: 6px; border: 1px solid transparent; background: none; cursor: pointer; font-size: 14px; line-height: 1; color: var(--ink-soft); display: grid; place-items: center; }
+  .ib:hover { background: #F1EEF8; border-color: var(--line-strong); color: var(--ink); }
+  .ib.del:hover { background: #FBE8E6; border-color: #E2A29C; color: #B4322A; }
+  .ib:focus-visible { opacity: 1; }
+
+  tbody.dim td:not(.blk) { opacity: .28; }
+  tbody.dim td.blk { opacity: .45; }
+  tr.dim td:not(.blk) { opacity: .28; }
+  tr.hit td:not(.blk) { background: #FFF6E2; }
+  mark { background: #FFD98A; color: inherit; border-radius: 3px; padding: 0 1px; }
+
+  .addrow td { border-bottom: 0; }
+  .addrow button { margin: 10px; }
+
+  .help { margin: 14px 2px 0; font-size: 13.5px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 4px 18px; }
+  kbd { font-family: var(--sans); font-size: 12px; padding: 0 5px; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 4px; background: #fff; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--ink); color: #fff; padding: 9px 18px; border-radius: 999px; font-size: 14px; opacity: 0; transition: .2s; pointer-events: none; z-index: 50; }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce) { .aura span { animation: none; } }
+  @media (max-width: 760px) {
+    main { padding-top: 16px; }
+    .wrap { max-height: calc(100vh - 160px); }
+    .acts { opacity: 1; }
+    .search { max-width: none; flex-basis: 100%; order: -1; }
+    .help { display: none; }
+  }
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    nav, .bar, .people, .acts, .addrow, .help, .aura, .save, .toast { display: none !important; }
+    body { background: #fff; font-size: 11px; }
+    main { padding: 0; max-width: none; }
+    .wrap { max-height: none; overflow: visible; box-shadow: none; border: 0; }
+    table { min-width: 0; }
+    thead th { position: static; }
+    .c { min-height: 0; padding: 4px 6px; }
+    td.need .c:empty { background: none; }
+    .c:empty::before { content: ""; }
+    tbody { break-inside: avoid; }
+    tbody.dim td, tr.dim td { opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+
+<nav aria-label="頁面切換"><div class="in">
+  <a href="./">工作人員導覽</a>
+  <a href="./flow.html" aria-current="page">細流表</a>
+</div></nav>
+
+<main>
+  <div class="head">
+    <div>
+      <p class="kicker">11/7（六）北一區聯辦｜瑜珈頌缽公益療癒體驗</p>
+      <h1>細流表</h1>
+    </div>
+    <div class="save" id="save" aria-live="polite">內容存在這台電腦的瀏覽器裡</div>
+  </div>
+
+  <div class="bar" role="toolbar" aria-label="表格工具">
+    <button class="btn primary" id="addBlk" type="button">＋ 新增時段</button>
+    <button class="btn" id="undo" type="button" title="⌘Z / Ctrl+Z" disabled>↶ 復原</button>
+    <button class="btn" id="redo" type="button" title="⌘⇧Z / Ctrl+Y" disabled>↷ 重做</button>
+    <span class="sep"></span>
+    <div class="search" id="searchBox">
+      <input id="q" type="search" placeholder="找人或關鍵字，例如：器材組" aria-label="篩選">
+      <button type="button" id="qx" aria-label="清除篩選">✕</button>
+    </div>
+    <span class="count" id="count"></span>
+    <span class="spacer"></span>
+    <button class="btn" id="copy" type="button" title="貼到 Google 試算表或 Excel">複製到試算表</button>
+    <button class="btn" id="csv" type="button">下載 Excel（CSV）</button>
+    <button class="btn" id="html" type="button" title="把目前內容存成一個 HTML 檔，可傳給別人">下載含內容的檔案</button>
+    <button class="btn" type="button" onclick="window.print()">列印</button>
+    <button class="btn" id="reset" type="button">還原原稿</button>
+  </div>
+  <div class="people" id="people"></div>
+
+  <div class="wrap">
+    <table id="grid">
+      <colgroup>
+        <col style="width:52px"><col style="width:84px"><col style="width:128px"><col style="width:34px">
+        <col><col style="width:190px"><col style="width:120px"><col style="width:190px"><col style="width:210px"><col style="width:120px">
+      </colgroup>
+      <thead><tr>
+        <th>編號</th><th>時間</th><th>活動名稱</th><th></th>
+        <th>活動內容</th><th>人員安排</th><th>地點</th><th>器材</th><th>備註</th><th></th>
+      </tr></thead>
+    </table>
+  </div>
+
+  <div class="help">
+    <span>點格子直接打字</span>
+    <span><kbd>Enter</kbd> 到下一列</span>
+    <span><kbd>Shift</kbd>+<kbd>Enter</kbd> 格內換行</span>
+    <span><kbd>Tab</kbd> 到右邊一格</span>
+    <span>滑到一列右側：新增／上下移／刪除</span>
+    <span>黃底＝人員還沒排</span>
+  </div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script type="application/json" id="seed">
+{"title":"2026.11.07 北一區聯辦｜瑜珈頌缽公益療癒體驗 <細流>","blocks":[
+ {"time":"11:00","name":"場佈","items":[
+  {"content":"佛堂獻供、發爐、點佛燈","people":"辦道組：崇哥／方淑怡","place":"佛堂","gear":"供果","note":""},
+  {"content":"瑜珈區空間淨空","people":"器材組：黃點傳師榮慶／林柏睿／朱芳誼","place":"","gear":"","note":""},
+  {"content":"頌缽區位置","people":"器材組","place":"","gear":"","note":""},
+  {"content":"音響、麥克風測試","people":"器材組","place":"","gear":"音響、麥克風","note":""},
+  {"content":"報到桌、名單、零錢","people":"報到組：朱芳誼／胡曉莉","place":"","gear":"長桌、名單、零錢","note":""},
+  {"content":"用餐區與茶水","people":"膳食組：劉淑怡／郭妙芳","place":"","gear":"","note":""},
+  {"content":"場佈人員午餐","people":"","place":"","gear":"","note":"自備或統一訂便當"}]},
+ {"time":"13:30","name":"報到","items":[
+  {"content":"報到、名單核對","people":"報到組：朱芳誼／胡曉莉","place":"","gear":"名單","note":""},
+  {"content":"收費 $300","people":"報到組","place":"","gear":"零錢","note":""},
+  {"content":"引導入座、回報人數","people":"報到組","place":"","gear":"","note":"提醒學員自備瑜珈墊"},
+  {"content":"茶水","people":"膳食組","place":"","gear":"","note":""}]},
+ {"time":"14:00","name":"流動瑜珈","core":true,"items":[
+  {"content":"帶領流動瑜珈","people":"詠真老師","place":"","gear":"","note":""},
+  {"content":"主持、控時、對接老師","people":"活動組：蔡維宸／陳美華／許淑芬","place":"","gear":"麥克風","note":""},
+  {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"瑜珈墊","note":""},
+  {"content":"音響、音樂","people":"器材組","place":"","gear":"","note":""}]},
+ {"time":"15:00","name":"頌缽音療","core":true,"items":[
+  {"content":"帶領頌缽音療","people":"詩涵老師","place":"","gear":"頌缽","note":""},
+  {"content":"主持、控時","people":"活動組","place":"","gear":"麥克風","note":""},
+  {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"","note":""}]},
+ {"time":"16:00","name":"祈福","items":[
+  {"content":"祈福儀式","people":"辦道組：崇哥／方淑怡","place":"佛堂","gear":"","note":"自由參加"},
+  {"content":"上下執禮","people":"","place":"佛堂","gear":"","note":""},
+  {"content":"三寶","people":"","place":"佛堂","gear":"","note":""},
+  {"content":"點道點傳師","people":"","place":"佛堂","gear":"","note":""},
+  {"content":"不參加祈福的學員","people":"","place":"","gear":"","note":""}]},
+ {"time":"17:00","name":"晚餐","items":[
+  {"content":"備餐、供餐","people":"膳食組：劉淑怡／郭妙芳","place":"","gear":"","note":""}]},
+ {"time":"18:00","name":"場復","items":[
+  {"content":"場地復原","people":"器材組","place":"","gear":"","note":""},
+  {"content":"餐後收拾","people":"膳食組","place":"","gear":"","note":""},
+  {"content":"收入結算","people":"","place":"","gear":"","note":""}]}
+]}
+</script>
+
+<script>
+(() => {
+  const KEY = 'songbo1107:flow';
+  const FIELDS = ['content', 'people', 'place', 'gear', 'note'];
+  const PH = { content: '內容', people: '待排', place: '', gear: '', note: '' };
+  const seed = JSON.parse(document.getElementById('seed').textContent);
+  const grid = document.getElementById('grid');
+  const $ = id => document.getElementById(id);
+
+  const store = {
+    get() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } },
+    set(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); return true; } catch (e) { return false; } },
+    del() { try { localStorage.removeItem(KEY); } catch (e) {} }
+  };
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const blankItem = () => ({ content: '', people: '', place: '', gear: '', note: '' });
+
+  let state = store.get() || clone(seed);
+  let undoStack = [], redoStack = [];
+  let filter = '';
+
+  /* ---------- history & save ---------- */
+  function snapshot() { undoStack.push(JSON.stringify(state)); if (undoStack.length > 200) undoStack.shift(); redoStack = []; syncHist(); }
+  function syncHist() { $('undo').disabled = !undoStack.length; $('redo').disabled = !redoStack.length; }
+  let saveT;
+  function save() {
+    clearTimeout(saveT);
+    saveT = setTimeout(() => {
+      const ok = store.set(state);
+      const t = new Date();
+      $('save').innerHTML = ok ? '<b>✓ 已存</b>（這台電腦）' + String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0')
+                               : '這個瀏覽器不能存，記得下載檔案';
+    }, 250);
+  }
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2200); }
+
+  /* ---------- render ---------- */
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const cell = (b, i, f, extra = '') =>
+    `<div class="c ${extra}" contenteditable="plaintext-only" spellcheck="false" data-b="${b}" data-i="${i}" data-f="${f}" data-ph="${esc(PH[f] ?? '')}">${esc(i < 0 ? state.blocks[b][f] : state.blocks[b].items[i][f])}</div>`;
+  const tmin = s => { const m = String(s).replace(/[：.]/g, ':').match(/^(\d{1,2}):?(\d{2})/); return m ? +m[1] * 60 + +m[2] : null; };
+
+  function render(focus) {
+    grid.querySelectorAll('tbody').forEach(t => t.remove());
+    let html = '', prev = null;
+    state.blocks.forEach((blk, b) => {
+      if (!blk.items.length) blk.items.push(blankItem());
+      const n = blk.items.length, t = tmin(blk.time), bad = t !== null && prev !== null && t < prev;
+      if (t !== null) prev = t;
+      html += `<tbody data-b="${b}">`;
+      blk.items.forEach((it, i) => {
+        html += `<tr class="${i === 0 ? 'first' : ''} ${blk.core ? 'core' : ''}" data-i="${i}">`;
+        if (i === 0) {
+          html += `<td class="blk" rowspan="${n}"><div class="no">${b}</div>
+            <div class="acts blk">
+              <button class="ib" type="button" data-act="bup" title="時段上移" aria-label="時段上移">↑</button>
+              <button class="ib" type="button" data-act="bdown" title="時段下移" aria-label="時段下移">↓</button>
+              <button class="ib" type="button" data-act="badd" title="在下方插入時段" aria-label="在下方插入時段">＋</button>
+              <button class="ib del" type="button" data-act="bdel" title="刪除整個時段" aria-label="刪除整個時段">✕</button>
+            </div></td>
+            <td class="blk ${bad ? 'bad' : ''}" rowspan="${n}" ${bad ? 'title="時間比上一個時段早"' : ''}>${cell(b, -1, 'time', 'time')}</td>
+            <td class="blk" rowspan="${n}">${cell(b, -1, 'name', 'name')}</td>`;
+        }
+        html += `<td><div class="sn">${i + 1}</div></td>`;
+        FIELDS.forEach(f => { html += `<td class="${f === 'people' ? 'need' : ''}">${cell(b, i, f)}</td>`; });
+        html += `<td><div class="acts item">
+            <button class="ib" type="button" data-act="iadd" title="在下方插入一列" aria-label="在下方插入一列">＋</button>
+            <button class="ib" type="button" data-act="iup" title="上移" aria-label="上移">↑</button>
+            <button class="ib" type="button" data-act="idown" title="下移" aria-label="下移">↓</button>
+            <button class="ib del" type="button" data-act="idel" title="刪除這列" aria-label="刪除這列">✕</button>
+          </div></td></tr>`;
+      });
+      html += '</tbody>';
+    });
+    html += `<tbody class="addrow"><tr><td colspan="10"><button class="btn" type="button" data-act="bappend">＋ 在最後新增時段</button></td></tr></tbody>`;
+    grid.insertAdjacentHTML('beforeend', html);
+    renderPeople();
+    applyFilter();
+    if (focus) {
+      const el = grid.querySelector(`.c[data-b="${focus.b}"][data-i="${focus.i}"][data-f="${focus.f}"]`);
+      if (el) { el.focus(); placeEnd(el); }
+    }
+  }
+  function placeEnd(el) { const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+  /* ---------- people chips ---------- */
+  function names() {
+    const map = new Map();
+    state.blocks.forEach(blk => blk.items.forEach(it => {
+      String(it.people).split(/[\n／/、,，；;：:]+/).map(s => s.trim()).filter(Boolean).forEach(nm => {
+        if (/^\d+\.?$/.test(nm)) return;
+        map.set(nm, (map.get(nm) || 0) + 1);
+      });
+    }));
+    return [...map.entries()];
+  }
+  function renderPeople() {
+    const list = names();
+    const box = $('people');
+    box.innerHTML = list.length ? '<span class="lbl">看某人的工作：</span>' + list.map(([n, c]) =>
+      `<button type="button" class="chip" data-name="${esc(n)}" aria-pressed="${filter === n}">${esc(n)}<small>${c}</small></button>`).join('') : '';
+  }
+
+  /* ---------- filter ---------- */
+  function applyFilter() {
+    const q = filter.trim();
+    $('searchBox').classList.toggle('has', !!q);
+    grid.querySelectorAll('mark').forEach(m => m.replaceWith(m.textContent));
+    grid.querySelectorAll('.c').forEach(c => c.normalize());
+    let hits = 0;
+    grid.querySelectorAll('tbody[data-b]').forEach(tb => {
+      const b = +tb.dataset.b, blk = state.blocks[b];
+      const blkHit = q && [blk.time, blk.name].some(v => String(v).includes(q));
+      let any = false;
+      tb.querySelectorAll('tr').forEach(tr => {
+        const it = blk.items[+tr.dataset.i];
+        const hit = !q || blkHit || FIELDS.some(f => String(it[f]).includes(q));
+        tr.classList.toggle('dim', !!q && !hit);
+        tr.classList.toggle('hit', !!q && hit);
+        if (q && hit) hits++;
+        any = any || hit;
+      });
+      tb.classList.toggle('dim', !!q && !any);
+    });
+    if (q) {
+      grid.querySelectorAll('.c').forEach(c => {
+        if (c === document.activeElement || !c.textContent.includes(q)) return;
+        c.innerHTML = esc(c.textContent).split(esc(q)).join(`<mark>${esc(q)}</mark>`);
+      });
+    }
+    $('count').textContent = q ? `符合 ${hits} 列` : '';
+    $('people').querySelectorAll('.chip').forEach(ch => ch.setAttribute('aria-pressed', ch.dataset.name === q));
+  }
+  function setFilter(v) { filter = v; $('q').value = v; applyFilter(); }
+
+  /* ---------- editing ---------- */
+  let editStart = null;
+  grid.addEventListener('focusin', e => {
+    const c = e.target.closest('.c'); if (!c) return;
+    if (c.querySelector('mark')) { c.textContent = c.textContent; placeEnd(c); }
+    editStart = JSON.stringify(state);
+  });
+  grid.addEventListener('focusout', e => {
+    const c = e.target.closest('.c'); if (!c) return;
+    if (editStart && editStart !== JSON.stringify(state)) { undoStack.push(editStart); redoStack = []; syncHist(); }
+    editStart = null;
+    if (c.dataset.f === 'time' || c.dataset.f === 'people') setTimeout(() => { if (!grid.contains(document.activeElement) || !document.activeElement.closest('.c')) render(); else softRefresh(); }, 0);
+    else if (filter) setTimeout(applyFilter, 0);
+  });
+  function softRefresh() {
+    renderPeople(); applyFilter();
+    let prev = null;
+    grid.querySelectorAll('tbody[data-b]').forEach(tb => {
+      const t = tmin(state.blocks[+tb.dataset.b].time), td = tb.querySelector('.c.time').parentElement;
+      const bad = t !== null && prev !== null && t < prev; if (t !== null) prev = t;
+      td.classList.toggle('bad', bad); td.title = bad ? '時間比上一個時段早' : '';
+    });
+  }
+  grid.addEventListener('input', e => {
+    const c = e.target.closest('.c'); if (!c) return;
+    const b = +c.dataset.b, i = +c.dataset.i, f = c.dataset.f;
+    let v = c.innerText.replace(/\n$/, '');
+    if (!v.trim()) { v = ''; if (c.innerHTML) c.innerHTML = ''; }
+    if (i < 0) state.blocks[b][f] = v; else state.blocks[b].items[i][f] = v;
+    save();
+  });
+  grid.addEventListener('paste', e => {
+    const c = e.target.closest('.c'); if (!c) return;
+    e.preventDefault();
+    const text = (e.clipboardData.getData('text/plain') || '').replace(/\r\n?/g, '\n');
+    document.execCommand('insertText', false, text);
+  });
+  grid.addEventListener('keydown', e => {
+    const c = e.target.closest('.c'); if (!c) return;
+    if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.isComposing && e.keyCode !== 229) {
+      e.preventDefault();
+      moveDown(c, e.metaKey || e.ctrlKey);
+    } else if (e.key === 'Escape') { c.blur(); }
+  });
+  function moveDown(c, insert) {
+    const b = +c.dataset.b, i = +c.dataset.i, f = c.dataset.f;
+    if (i < 0) { // block field → first item's content
+      const el = grid.querySelector(`.c[data-b="${b}"][data-i="0"][data-f="content"]`); el && (el.focus(), placeEnd(el)); return;
+    }
+    const blk = state.blocks[b];
+    if (insert) {
+      c.blur(); snapshot(); blk.items.splice(i + 1, 0, blankItem()); save(); render({ b, i: i + 1, f }); return;
+    }
+    let nb = b, ni = i + 1;
+    if (ni >= blk.items.length) { nb = b + 1; ni = 0; }
+    const el = grid.querySelector(`.c[data-b="${nb}"][data-i="${ni}"][data-f="${f}"]`);
+    if (el) { el.focus(); placeEnd(el); } else c.blur();
+  }
+
+  /* ---------- row actions ---------- */
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-act]'); if (!btn) return;
+    const tb = btn.closest('tbody'), tr = btn.closest('tr');
+    const b = tb && tb.dataset.b !== undefined ? +tb.dataset.b : -1;
+    const i = tr && tr.dataset.i !== undefined ? +tr.dataset.i : -1;
+    const B = state.blocks, act = btn.dataset.act;
+    const swap = (arr, a, z) => { if (z < 0 || z >= arr.length) return false; [arr[a], arr[z]] = [arr[z], arr[a]]; return true; };
+    const newBlock = () => ({ time: '', name: '', items: [blankItem()] });
+    snapshot();
+    let focus = null, changed = true;
+    switch (act) {
+      case 'iadd': B[b].items.splice(i + 1, 0, blankItem()); focus = { b, i: i + 1, f: 'content' }; break;
+      case 'iup': changed = swap(B[b].items, i, i - 1); break;
+      case 'idown': changed = swap(B[b].items, i, i + 1); break;
+      case 'idel': {
+        const it = B[b].items[i];
+        if (FIELDS.some(f => it[f]) && !confirm('刪除這一列？（可按「復原」救回來）')) { changed = false; break; }
+        B[b].items.splice(i, 1); if (!B[b].items.length) B[b].items.push(blankItem()); break;
+      }
+      case 'bup': changed = swap(B, b, b - 1); break;
+      case 'bdown': changed = swap(B, b, b + 1); break;
+      case 'badd': B.splice(b + 1, 0, newBlock()); focus = { b: b + 1, i: -1, f: 'time' }; break;
+      case 'bappend': B.push(newBlock()); focus = { b: B.length - 1, i: -1, f: 'time' }; break;
+      case 'bdel':
+        if (!confirm(`刪除「${B[b].name || '這個時段'}」整個時段（${B[b].items.length} 列）？可按「復原」救回來。`)) { changed = false; break; }
+        B.splice(b, 1); break;
+      default: changed = false;
+    }
+    if (!changed) { undoStack.pop(); syncHist(); return; }
+    save(); render(focus);
+  });
+  $('addBlk').addEventListener('click', () => { snapshot(); state.blocks.push({ time: '', name: '', items: [blankItem()] }); save(); render({ b: state.blocks.length - 1, i: -1, f: 'time' }); $('grid').closest('.wrap').scrollTop = 1e6; });
+
+  function undo() { if (!undoStack.length) return; redoStack.push(JSON.stringify(state)); state = JSON.parse(undoStack.pop()); syncHist(); save(); render(); toast('已復原'); }
+  function redo() { if (!redoStack.length) return; undoStack.push(JSON.stringify(state)); state = JSON.parse(redoStack.pop()); syncHist(); save(); render(); toast('已重做'); }
+  $('undo').addEventListener('click', undo);
+  $('redo').addEventListener('click', redo);
+  document.addEventListener('keydown', e => {
+    if (document.activeElement && document.activeElement.closest('.c, input')) return; // native undo while typing
+    const mod = e.metaKey || e.ctrlKey; if (!mod) return;
+    const k = e.key.toLowerCase();
+    if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+    else if ((k === 'z' && e.shiftKey) || k === 'y') { e.preventDefault(); redo(); }
+  });
+
+  /* ---------- filter controls ---------- */
+  $('q').addEventListener('input', e => { filter = e.target.value; applyFilter(); });
+  $('qx').addEventListener('click', () => { setFilter(''); $('q').focus(); });
+  $('people').addEventListener('click', e => { const ch = e.target.closest('.chip'); if (ch) setFilter(filter === ch.dataset.name ? '' : ch.dataset.name); });
+
+  /* ---------- export ---------- */
+  const COLS = ['編號', '時間', '活動名稱', '活動內容', '人員安排', '地點', '器材', '備註'];
+  const numbered = (items, f) => items.length === 1 ? items[0][f] : items.map((it, k) => it[f] ? `${k + 1}.${it[f]}` : '').join('\n').replace(/\n+$/, '');
+  function rows() {
+    return state.blocks.map((blk, b) => [String(b), blk.time, blk.name, ...FIELDS.map(f => numbered(blk.items, f))]);
+  }
+  $('csv').addEventListener('click', () => {
+    const q = v => /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+    const out = [[state.title || seed.title], COLS, ...rows()].map(r => r.map(v => q(String(v ?? ''))).join(',')).join('\r\n');
+    download('﻿' + out, '細流表_1107.csv', 'text/csv;charset=utf-8');
+  });
+  $('copy').addEventListener('click', async () => {
+    const r = rows();
+    const h = '<table><tr>' + COLS.map(c => `<th>${c}</th>`).join('') + '</tr>' +
+      r.map(row => '<tr>' + row.map(v => `<td>${esc(v).replace(/\n/g, '<br>')}</td>`).join('') + '</tr>').join('') + '</table>';
+    const t = [COLS, ...r].map(row => row.map(v => /[\t\n"]/.test(v) ? '"' + String(v).replace(/"/g, '""') + '"' : v).join('\t')).join('\n');
+    try {
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([h], { type: 'text/html' }), 'text/plain': new Blob([t], { type: 'text/plain' }) })]);
+      toast('已複製，到試算表點一格按貼上');
+    } catch (err) {
+      try { await navigator.clipboard.writeText(t); toast('已複製（純文字）'); } catch (e2) { toast('這個瀏覽器不讓複製，改用下載 Excel'); }
+    }
+  });
+  $('html').addEventListener('click', () => {
+    const doc = document.documentElement.cloneNode(true);
+    doc.querySelector('#seed').textContent = '\n' + JSON.stringify(state) + '\n';
+    doc.querySelectorAll('#grid tbody').forEach(t => t.remove());
+    doc.querySelector('#people').innerHTML = '';
+    download('<!doctype html>\n' + doc.outerHTML, '細流表_1107.html', 'text/html');
+  });
+  $('reset').addEventListener('click', () => {
+    if (!confirm('把表格還原成原稿？這台電腦上改過的內容會被蓋掉（還原後仍可按「復原」救回）。')) return;
+    snapshot(); state = clone(seed); store.del(); render(); toast('已還原原稿');
+  });
+  function download(text, name, type) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  render();
+  if (store.get()) $('save').textContent = '已載入這台電腦上次存的內容';
+})();
+</script>
+</body>
+</html>
