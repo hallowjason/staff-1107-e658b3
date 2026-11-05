@@ -62,12 +62,8 @@
   .count { font-size: 13px; color: var(--ink-soft); }
   .spacer { flex: 1; }
 
-  .people { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; background: rgba(255,255,255,.55); border-left: 1px solid var(--glass-line); border-right: 1px solid var(--glass-line); border-bottom: 1px solid var(--line); align-items: center; }
-  .people .lbl { font-size: 13px; color: var(--ink-soft); margin-right: 4px; }
-  .chip { font-size: 13px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line-strong); background: #fff; cursor: pointer; }
-  .chip:hover { border-color: var(--gold); }
-  .chip[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: #fff; }
-  .chip small { opacity: .65; margin-left: 3px; }
+  .who { padding: 6px 30px 6px 11px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 14px; background: #fff; cursor: pointer; max-width: 180px; }
+  .who.on { background: var(--gold); border-color: var(--gold); color: #fff; }
 
   /* grid */
   .wrap { overflow: auto; max-height: calc(100vh - 200px); min-height: 320px; background: #fff;
@@ -129,7 +125,7 @@
   }
   @media print {
     @page { size: A4 landscape; margin: 10mm; }
-    nav, .bar, .people, .acts, .addrow, .help, .aura, .save, .toast { display: none !important; }
+    nav, .bar, .acts, .addrow, .help, .aura, .save, .toast { display: none !important; }
     body { background: #fff; font-size: 11px; }
     main { padding: 0; max-width: none; }
     .wrap { max-height: none; overflow: visible; box-shadow: none; border: 0; }
@@ -169,6 +165,7 @@
       <input id="q" type="search" placeholder="找人或關鍵字，例如：器材組" aria-label="篩選">
       <button type="button" id="qx" aria-label="清除篩選">✕</button>
     </div>
+    <select class="who" id="who" aria-label="看誰的工作"></select>
     <span class="count" id="count"></span>
     <span class="spacer"></span>
     <button class="btn" id="copy" type="button" title="貼到 Google 試算表或 Excel">複製到試算表</button>
@@ -177,7 +174,6 @@
     <button class="btn" type="button" onclick="window.print()">列印</button>
     <button class="btn" id="reset" type="button">還原原稿</button>
   </div>
-  <div class="people" id="people"></div>
 
   <div class="wrap">
     <table id="grid">
@@ -206,35 +202,35 @@
 <script type="application/json" id="seed">
 {"title":"2026.11.07 北一區聯辦｜瑜珈頌缽公益療癒體驗 <細流>","blocks":[
  {"time":"11:00","name":"場佈","items":[
-  {"content":"佛堂獻供、發爐、點佛燈","people":"辦道組：崇哥／方淑怡","place":"佛堂","gear":"供果","note":""},
-  {"content":"瑜珈區空間淨空","people":"器材組：黃點傳師榮慶／林柏睿／朱芳誼","place":"","gear":"","note":""},
+  {"content":"佛堂獻供、發爐、點佛燈","people":"辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿","place":"佛堂","gear":"供果","note":""},
+  {"content":"瑜珈區空間淨空","people":"器材組：柏睿／芳誼","place":"","gear":"","note":""},
   {"content":"頌缽區位置","people":"器材組","place":"","gear":"","note":""},
   {"content":"音響、麥克風測試","people":"器材組","place":"","gear":"音響、麥克風","note":""},
-  {"content":"報到桌、名單、零錢","people":"報到組：朱芳誼／胡曉莉","place":"","gear":"長桌、名單、零錢","note":""},
-  {"content":"用餐區與茶水","people":"膳食組：劉淑怡／郭妙芳","place":"","gear":"","note":""},
+  {"content":"報到桌、名單、零錢","people":"報到組：芳誼／曉莉","place":"","gear":"長桌、名單、零錢","note":""},
+  {"content":"用餐區與茶水","people":"膳食組：淑怡講師／妙芳","place":"","gear":"","note":""},
   {"content":"場佈人員午餐","people":"","place":"","gear":"","note":"自備或統一訂便當"}]},
  {"time":"13:30","name":"報到","items":[
-  {"content":"報到、名單核對","people":"報到組：朱芳誼／胡曉莉","place":"","gear":"名單","note":""},
+  {"content":"報到、名單核對","people":"報到組：芳誼／曉莉","place":"","gear":"名單","note":""},
   {"content":"收費 $300","people":"報到組","place":"","gear":"零錢","note":""},
   {"content":"引導入座、回報人數","people":"報到組","place":"","gear":"","note":"提醒學員自備瑜珈墊"},
   {"content":"茶水","people":"膳食組","place":"","gear":"","note":""}]},
  {"time":"14:00","name":"流動瑜珈","core":true,"items":[
   {"content":"帶領流動瑜珈","people":"詠真老師","place":"","gear":"","note":""},
-  {"content":"主持、控時、對接老師","people":"活動組：蔡維宸／陳美華／許淑芬","place":"","gear":"麥克風","note":""},
-  {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"瑜珈墊","note":""},
+  {"content":"主持、控時、對接老師","people":"活動組：維宸講師／美華","place":"","gear":"麥克風","note":""},
+  {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"瑜珈墊","note":"體驗人員 15 人"},
   {"content":"音響、音樂","people":"器材組","place":"","gear":"","note":""}]},
  {"time":"15:00","name":"頌缽音療","core":true,"items":[
   {"content":"帶領頌缽音療","people":"詩涵老師","place":"","gear":"頌缽","note":""},
   {"content":"主持、控時","people":"活動組","place":"","gear":"麥克風","note":""},
   {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"","note":""}]},
  {"time":"16:00","name":"祈福","items":[
-  {"content":"祈福儀式","people":"辦道組：崇哥／方淑怡","place":"佛堂","gear":"","note":"自由參加"},
+  {"content":"祈福儀式","people":"辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿","place":"佛堂","gear":"","note":"自由參加"},
   {"content":"上下執禮","people":"","place":"佛堂","gear":"","note":""},
   {"content":"三寶","people":"","place":"佛堂","gear":"","note":""},
   {"content":"點道點傳師","people":"","place":"佛堂","gear":"","note":""},
   {"content":"不參加祈福的學員","people":"","place":"","gear":"","note":""}]},
  {"time":"17:00","name":"晚餐","items":[
-  {"content":"備餐、供餐","people":"膳食組：劉淑怡／郭妙芳","place":"","gear":"","note":""}]},
+  {"content":"備餐、供餐","people":"膳食組：淑怡講師／妙芳","place":"","gear":"","note":""}]},
  {"time":"18:00","name":"場復","items":[
   {"content":"場地復原","people":"器材組","place":"","gear":"","note":""},
   {"content":"餐後收拾","people":"膳食組","place":"","gear":"","note":""},
@@ -244,7 +240,7 @@
 
 <script>
 (() => {
-  const KEY = 'songbo1107:flow';
+  const KEY = 'songbo1107:flow2';
   const FIELDS = ['content', 'people', 'place', 'gear', 'note'];
   const PH = { content: '內容', people: '待排', place: '', gear: '', note: '' };
   const seed = JSON.parse(document.getElementById('seed').textContent);
@@ -327,44 +323,59 @@
   }
   function placeEnd(el) { const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
 
-  /* ---------- people chips ---------- */
-  function names() {
-    const map = new Map();
+  /* ---------- who filter ---------- */
+  let who = '';
+  const split = v => String(v).split(/[\n／/、,，；;]+/).map(x => x.trim()).filter(x => x && !/^\d+\.?$/.test(x));
+  function roster() {
+    const groups = new Map(), people = new Set();
     state.blocks.forEach(blk => blk.items.forEach(it => {
-      String(it.people).split(/[\n／/、,，；;：:]+/).map(s => s.trim()).filter(Boolean).forEach(nm => {
-        if (/^\d+\.?$/.test(nm)) return;
-        map.set(nm, (map.get(nm) || 0) + 1);
-      });
+      const m = String(it.people).match(/^(.+?)[：:]([\s\S]+)$/);
+      if (m) {
+        const g = m[1].trim(); if (!groups.has(g)) groups.set(g, new Set());
+        split(m[2]).forEach(n => { groups.get(g).add(n); people.add(n); });
+      } else split(it.people).forEach(t => { if (/(組|人員)$/.test(t)) { if (!groups.has(t)) groups.set(t, new Set()); } else people.add(t); });
     }));
-    return [...map.entries()];
+    return { groups, people: [...people].filter(n => !groups.has(n)) };
+  }
+  function tokensOf(v) {
+    const m = String(v).match(/^(.+?)[：:]([\s\S]+)$/);
+    return m ? [m[1].trim(), ...split(m[2])] : split(v);
+  }
+  function whoMatch(it, groups) {
+    if (!who) return true;
+    const toks = tokensOf(it.people);
+    if (toks.includes(who)) return true;
+    return [...groups].some(([g, mem]) => mem.has(who) && toks.includes(g));
   }
   function renderPeople() {
-    const list = names();
-    const box = $('people');
-    box.innerHTML = list.length ? '<span class="lbl">看某人的工作：</span>' + list.map(([n, c]) =>
-      `<button type="button" class="chip" data-name="${esc(n)}" aria-pressed="${filter === n}">${esc(n)}<small>${c}</small></button>`).join('') : '';
+    const { groups, people } = roster(), sel = $('who');
+    if (who && !groups.has(who) && !people.includes(who)) who = '';
+    sel.innerHTML = '<option value="">看誰的工作…</option>' +
+      '<optgroup label="組別">' + [...groups.keys()].map(g => `<option>${esc(g)}</option>`).join('') + '</optgroup>' +
+      '<optgroup label="個人">' + people.map(n => `<option>${esc(n)}</option>`).join('') + '</optgroup>';
+    sel.value = who;
   }
 
   /* ---------- filter ---------- */
   function applyFilter() {
-    const q = filter.trim();
+    const q = filter.trim(), active = !!(q || who), { groups } = roster();
     $('searchBox').classList.toggle('has', !!q);
     grid.querySelectorAll('mark').forEach(m => m.replaceWith(m.textContent));
     grid.querySelectorAll('.c').forEach(c => c.normalize());
     let hits = 0;
     grid.querySelectorAll('tbody[data-b]').forEach(tb => {
       const b = +tb.dataset.b, blk = state.blocks[b];
-      const blkHit = q && [blk.time, blk.name].some(v => String(v).includes(q));
+      const blkHit = !!q && [blk.time, blk.name].some(v => String(v).includes(q));
       let any = false;
       tb.querySelectorAll('tr').forEach(tr => {
         const it = blk.items[+tr.dataset.i];
-        const hit = !q || blkHit || FIELDS.some(f => String(it[f]).includes(q));
-        tr.classList.toggle('dim', !!q && !hit);
-        tr.classList.toggle('hit', !!q && hit);
-        if (q && hit) hits++;
+        const hit = (!q || blkHit || FIELDS.some(f => String(it[f]).includes(q))) && whoMatch(it, groups);
+        tr.classList.toggle('dim', active && !hit);
+        tr.classList.toggle('hit', active && hit);
+        if (active && hit) hits++;
         any = any || hit;
       });
-      tb.classList.toggle('dim', !!q && !any);
+      tb.classList.toggle('dim', active && !any);
     });
     if (q) {
       grid.querySelectorAll('.c').forEach(c => {
@@ -372,8 +383,8 @@
         c.innerHTML = esc(c.textContent).split(esc(q)).join(`<mark>${esc(q)}</mark>`);
       });
     }
-    $('count').textContent = q ? `符合 ${hits} 列` : '';
-    $('people').querySelectorAll('.chip').forEach(ch => ch.setAttribute('aria-pressed', ch.dataset.name === q));
+    $('count').textContent = active ? `符合 ${hits} 列` : '';
+    $('who').classList.toggle('on', !!who);
   }
   function setFilter(v) { filter = v; $('q').value = v; applyFilter(); }
 
@@ -485,7 +496,7 @@
   /* ---------- filter controls ---------- */
   $('q').addEventListener('input', e => { filter = e.target.value; applyFilter(); });
   $('qx').addEventListener('click', () => { setFilter(''); $('q').focus(); });
-  $('people').addEventListener('click', e => { const ch = e.target.closest('.chip'); if (ch) setFilter(filter === ch.dataset.name ? '' : ch.dataset.name); });
+  $('who').addEventListener('change', e => { who = e.target.value; applyFilter(); });
 
   /* ---------- export ---------- */
   const COLS = ['編號', '時間', '活動名稱', '活動內容', '人員安排', '地點', '器材', '備註'];
@@ -514,7 +525,7 @@
     const doc = document.documentElement.cloneNode(true);
     doc.querySelector('#seed').textContent = '\n' + JSON.stringify(state) + '\n';
     doc.querySelectorAll('#grid tbody').forEach(t => t.remove());
-    doc.querySelector('#people').innerHTML = '';
+    doc.querySelector('#who').innerHTML = '';
     download('<!doctype html>\n' + doc.outerHTML, '細流表_1107.html', 'text/html');
   });
   $('reset').addEventListener('click', () => {
