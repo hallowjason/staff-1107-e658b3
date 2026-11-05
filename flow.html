@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>瑜珈頌缽細流表</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23E2A33A' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23E2A33A'/%3E%3C/svg%3E">
 <style>
   :root {
     --apricot: #F7CD8E; --peach: #F2B49B; --lavender: #B8B4DE; --dusk: #5A5893;
     --ink: #2B2A55; --ink-soft: #4C4B78; --gold: #D8962C; --amber: #9A5B1E;
-    --glass: rgba(255, 255, 255, .58); --glass-line: rgba(255, 255, 255, .75);
+    --glass-line: rgba(255, 255, 255, .75);
     --todo: #FCE9C6; --line: rgba(90, 88, 147, .16); --line-strong: rgba(90, 88, 147, .38);
+    --hl-y: #FFE07A; --hl-g: #BFE6B3; --hl-b: #BCD6F5; --hl-r: #F7B9B2; --hl-p: #DCCBF3;
     --serif: "Noto Serif TC", "Songti TC", "Source Han Serif TC", serif;
     --sans: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   }
@@ -25,6 +26,7 @@
   a { color: var(--ink); }
   button { font: inherit; color: inherit; }
   :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  [hidden] { display: none !important; }
 
   .aura { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
   .aura span { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .6; animation: drift 30s ease-in-out infinite alternate; }
@@ -40,30 +42,59 @@
   nav a[aria-current] { color: var(--ink); border-bottom-color: var(--gold); font-weight: 600; }
 
   main { max-width: 1480px; margin: 0 auto; padding: 24px 16px 60px; }
-  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin-bottom: 14px; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 24px; margin-bottom: 14px; }
   .kicker { font-family: var(--serif); color: var(--amber); margin: 0; font-size: 15px; }
   h1 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 36px); line-height: 1.25; margin: 2px 0 0; letter-spacing: .03em; }
-  .save { font-size: 13px; color: var(--ink-soft); }
-  .save b { font-weight: 500; color: #4E7A47; }
+  .status { font-size: 13px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+  .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #B5B2CC; flex: none; }
+  .status.ok::before { background: #5BA65A; }
+  .status.busy::before { background: var(--gold); }
+  .status.err::before { background: #D9534A; }
 
   /* toolbar */
-  .bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 14px 14px 0 0;
-    background: rgba(255, 255, 255, .7); border: 1px solid var(--glass-line); border-bottom: 1px solid var(--line); }
-  .btn { padding: 6px 13px; border-radius: 8px; border: 1px solid var(--line-strong); background: #fff; cursor: pointer; font-size: 14px; white-space: nowrap; }
+  .bar { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; padding: 10px 12px; border-radius: 14px 14px 0 0;
+    background: rgba(255, 255, 255, .72); border: 1px solid var(--glass-line); border-bottom: 1px solid var(--line); position: relative; z-index: 6; }
+  .btn { height: 34px; padding: 0 13px; border-radius: 8px; border: 1px solid var(--line-strong); background: #fff; cursor: pointer; font-size: 14px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
   .btn:hover { border-color: var(--ink); }
   .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
   .btn.primary:hover { background: #3E3C78; }
-  .btn:disabled { opacity: .4; cursor: default; }
-  .sep { width: 1px; height: 22px; background: var(--line-strong); margin: 0 4px; }
-  .search { position: relative; flex: 1 1 200px; max-width: 280px; }
-  .search input { width: 100%; padding: 6px 30px 6px 11px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 14px; background: #fff; }
+  .btn:disabled { opacity: .35; cursor: default; }
+  .btn.sq { width: 34px; padding: 0; justify-content: center; }
+  .tools, .find { display: flex; align-items: center; gap: 8px; }
+  .find { flex: 1 1 360px; min-width: 0; }
+  .sep { width: 1px; height: 22px; background: var(--line-strong); flex: none; }
+  .search { position: relative; flex: 1 1 180px; max-width: 280px; min-width: 0; }
+  .search input { width: 100%; height: 34px; padding: 0 30px 0 11px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 14px; background: #fff; }
   .search button { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border: 0; background: none; cursor: pointer; color: var(--ink-soft); padding: 2px 6px; display: none; }
   .search.has button { display: block; }
-  .count { font-size: 13px; color: var(--ink-soft); }
-  .spacer { flex: 1; }
-
-  .who { padding: 6px 30px 6px 11px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 14px; background: #fff; cursor: pointer; max-width: 180px; }
+  .who { height: 34px; padding: 0 26px 0 10px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 14px; background: #fff; cursor: pointer; max-width: 170px; flex: 0 1 auto; min-width: 0; }
   .who.on { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .count { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+  .right { display: flex; gap: 8px; margin-left: auto; }
+
+  .fill { display: flex; align-items: center; gap: 5px; }
+  .fill .lbl { font-size: 13px; color: var(--ink-soft); margin-right: 2px; }
+  .sw { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line-strong); cursor: pointer; padding: 0; flex: none; background: var(--c); }
+  .sw:hover { transform: scale(1.08); }
+  .sw[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); transform: scale(1.12); }
+  .sw.eraser { background: #fff; display: grid; place-items: center; font-size: 13px; color: var(--ink-soft); }
+  .sw.eraser::after { content: ""; width: 16px; height: 2px; background: #D9534A; transform: rotate(-45deg); border-radius: 2px; }
+
+  .more { position: relative; }
+  .more summary { list-style: none; }
+  .more summary::-webkit-details-marker { display: none; }
+  .menu { position: absolute; right: 0; top: calc(100% + 6px); background: #fff; border-radius: 12px; padding: 6px; min-width: 200px;
+    box-shadow: 0 18px 40px -12px rgba(43, 42, 85, .35), 0 0 0 1px var(--line); z-index: 30; }
+  .menu button { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 14.5px; }
+  .menu button:hover { background: #F4F1FA; }
+  .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 6px; }
+
+  .login { position: absolute; right: 12px; top: calc(100% + 6px); background: #fff; border-radius: 14px; padding: 16px; width: min(320px, calc(100vw - 32px));
+    box-shadow: 0 18px 40px -12px rgba(43, 42, 85, .35), 0 0 0 1px var(--line); z-index: 30; }
+  .login p { margin: 0 0 10px; font-size: 14px; color: var(--ink-soft); }
+  .login form { display: flex; gap: 8px; }
+  .login input { flex: 1; min-width: 0; height: 38px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line-strong); font: inherit; font-size: 16px; letter-spacing: .08em; }
+  .login .err { color: #B4322A; font-size: 13px; margin: 8px 0 0; min-height: 1em; }
 
   /* grid */
   .wrap { overflow: auto; max-height: calc(100vh - 200px); min-height: 320px; background: #fff;
@@ -79,53 +110,118 @@
   td.blk { background: #FBF7F1; }
   tr.core td.blk { background: linear-gradient(100deg, #FFEBC9, #ECE6FA); }
 
-  .c { min-height: 36px; padding: 7px 10px; white-space: pre-wrap; word-break: break-word; outline: none; cursor: text; }
-  .c:hover { background: rgba(247, 205, 142, .14); }
+  .c { min-height: 36px; padding: 7px 10px; white-space: pre-wrap; word-break: break-word; outline: none; }
+  body.editing .c { cursor: text; }
+  body.editing .c:hover { background: rgba(247, 205, 142, .14); }
   .c:focus { background: #FFFCF4; box-shadow: inset 0 0 0 2px var(--gold); }
-  .c:empty::before { content: attr(data-ph); color: #B5B2CC; }
+  body.editing .c:empty::before { content: attr(data-ph); color: #B5B2CC; }
   td.need .c:empty { background: var(--todo); }
-  td.need .c:empty::before { color: #A57A30; }
+  td.need .c:empty::before { content: "待排"; color: #A57A30; }
   .c.time { font-family: var(--serif); font-size: 17px; font-variant-numeric: tabular-nums; color: var(--amber); }
   .c.name { font-weight: 600; font-size: 15.5px; }
   td.bad .c.time { color: #B4322A; box-shadow: inset 3px 0 0 #D9534A; }
   .no { font-family: var(--serif); font-size: 17px; color: var(--dusk); padding: 7px 0 0; text-align: center; font-variant-numeric: tabular-nums; }
   .sn { font-size: 12px; color: #A3A0C2; font-variant-numeric: tabular-nums; padding: 9px 0 0; text-align: center; }
 
-  .acts { display: flex; gap: 2px; padding: 5px 6px; opacity: 0; transition: opacity .12s; }
-  tr:hover .acts.item, tr:focus-within .acts.item { opacity: 1; }
-  tbody[data-b]:hover .acts.blk, tbody[data-b]:focus-within .acts.blk { opacity: 1; }
+  /* highlight colours — beat block tint, hover and the todo fill */
+  td.hl-y { background: var(--hl-y) !important; } td.hl-g { background: var(--hl-g) !important; }
+  td.hl-b { background: var(--hl-b) !important; } td.hl-r { background: var(--hl-r) !important; }
+  td.hl-p { background: var(--hl-p) !important; }
+  td[class*="hl-"] .c, td[class*="hl-"] .c:empty, body.editing td[class*="hl-"] .c:hover { background: transparent; }
+  body.painting .c { cursor: cell !important; caret-color: transparent; }
+  body.painting td:has(.c):hover { box-shadow: inset 0 0 0 2px var(--ink); }
+
+  .acts { display: none; gap: 2px; padding: 5px 6px; }
+  body.editing .acts { display: flex; opacity: 0; transition: opacity .12s; }
+  body.editing tr:hover .acts.item, body.editing tr:focus-within .acts.item,
+  body.editing tbody[data-b]:hover .acts.blk, body.editing tbody[data-b]:focus-within .acts.blk { opacity: 1; }
   .acts.blk { flex-direction: column; align-items: center; padding: 6px 0; }
   .ib { width: 26px; height: 26px; border-radius: 6px; border: 1px solid transparent; background: none; cursor: pointer; font-size: 14px; line-height: 1; color: var(--ink-soft); display: grid; place-items: center; }
   .ib:hover { background: #F1EEF8; border-color: var(--line-strong); color: var(--ink); }
   .ib.del:hover { background: #FBE8E6; border-color: #E2A29C; color: #B4322A; }
-  .ib:focus-visible { opacity: 1; }
 
   tbody.dim td:not(.blk) { opacity: .28; }
   tbody.dim td.blk { opacity: .45; }
   tr.dim td:not(.blk) { opacity: .28; }
-  tr.hit td:not(.blk) { background: #FFF6E2; }
+  tr.hit td:not(.blk):not([class*="hl-"]) { background: #FFF6E2; }
   mark { background: #FFD98A; color: inherit; border-radius: 3px; padding: 0 1px; }
 
+  .addrow { display: none; }
+  body.editing .addrow { display: table-row-group; }
   .addrow td { border-bottom: 0; }
   .addrow button { margin: 10px; }
 
   .help { margin: 14px 2px 0; font-size: 13.5px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 4px 18px; }
   kbd { font-family: var(--sans); font-size: 12px; padding: 0 5px; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 4px; background: #fff; }
 
-  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--ink); color: #fff; padding: 9px 18px; border-radius: 999px; font-size: 14px; opacity: 0; transition: .2s; pointer-events: none; z-index: 50; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--ink); color: #fff; padding: 9px 18px; border-radius: 999px; font-size: 14px; opacity: 0; transition: .2s; pointer-events: none; z-index: 50; max-width: calc(100vw - 32px); text-align: center; }
   .toast.on { opacity: 1; transform: translate(-50%, 0); }
 
   @media (prefers-reduced-motion: reduce) { .aura span { animation: none; } }
+
+  /* ---------- phone: card list ---------- */
   @media (max-width: 760px) {
-    main { padding-top: 16px; }
-    .wrap { max-height: calc(100vh - 160px); }
-    .acts { opacity: 1; }
-    .search { max-width: none; flex-basis: 100%; order: -1; }
+    main { padding: 14px 12px 40px; }
+    body.editing main { padding-bottom: 96px; }
+    .head { margin-bottom: 10px; }
+    .bar { border-radius: 14px; padding: 10px; gap: 8px; }
+    .find { flex-basis: 100%; order: 1; }
+    .search { max-width: none; flex: 1 1 auto; }
+    .who { max-width: 42%; }
+    .count { display: none; }
+    .right { order: 2; width: 100%; margin: 0; }
+    .right > * { flex: 1; }
+    .right .btn, .more summary { width: 100%; justify-content: center; height: 38px; }
+    .menu { left: 0; right: auto; width: 100%; }
+    /* edit tools become a bottom dock within thumb reach */
+    .tools { position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; background: rgba(255, 255, 255, .96); backdrop-filter: blur(10px);
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -10px 30px -12px rgba(43, 42, 85, .3);
+      overflow-x: auto; scrollbar-width: none; }
+    .tools > *, .fill > * { flex-shrink: 0; }
+    .fill .lbl { display: none; }
+    .tools .btn { height: 40px; }
+    .tools .btn.sq { width: 40px; }
+    .sw { width: 32px; height: 32px; }
+    .tools .addtxt { display: none; }
     .help { display: none; }
+
+    .wrap { max-height: none; overflow: visible; background: none; border: 0; box-shadow: none; min-height: 0; margin-top: 12px; }
+    table, colgroup, thead { display: block; min-width: 0; }
+    thead, colgroup { display: none; }
+    tbody { display: block; }
+    tbody[data-b] { background: #fff; border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 10px 30px -18px rgba(60, 50, 120, .45); }
+    tr { display: flex; flex-wrap: wrap; padding: 4px 10px 8px; border-top: 1px solid var(--line); }
+    tr.first { padding-top: 0; border-top: 0; }
+    td { display: block; border: 0 !important; }
+    td.blk { order: -3; background: none; }
+    tr.first td.btime { margin: 0 0 4px -10px; }
+    tr.first td.bname { margin: 0 -10px 4px 0; }
+    td.bno { display: none; }
+    td.btime { flex: 0 0 auto; width: auto; padding-left: 10px; background: #F6F1EA; }
+    td.btime .c { white-space: nowrap; min-width: 3.2em; }
+    td.bname { flex: 1 1 0; padding-right: 10px; background: #F6F1EA; }
+    tr.core td.btime, tr.core td.bname { background: #F8E9D2; }
+    td.btime .c, td.bname .c { min-height: 0; padding: 10px 6px; }
+    td.btime .c { font-size: 19px; }
+    td.bname .c { font-size: 17px; font-family: var(--serif); }
+    td.snc { display: none; }
+    td.f { flex: 1 1 100%; display: flex; align-items: flex-start; border-radius: 6px; }
+    td.f::before { content: attr(data-label); flex: 0 0 2.6em; font-size: 12.5px; color: #8E8BB0; padding-top: 7px; }
+    td.f[data-f="content"]::before { content: none; }
+    td.f[data-f="content"] .c { font-weight: 600; padding-left: 0; }
+    td.f .c { flex: 1; min-height: 0; padding: 5px 6px; }
+    body:not(.editing) td.f:not(.need):has(.c:empty) { display: none; }
+    td.ia { flex: 1 1 100%; }
+    body.editing .acts { opacity: 1 !important; }
+    .acts.item { justify-content: flex-end; padding: 2px 0 0; }
+    .ib { width: 34px; height: 34px; }
+    .addrow td { display: block; }
+    body.editing .addrow { display: block; }
+    .addrow button { margin: 0; width: 100%; height: 44px; justify-content: center; }
   }
   @media print {
     @page { size: A4 landscape; margin: 10mm; }
-    nav, .bar, .acts, .addrow, .help, .aura, .save, .toast { display: none !important; }
+    nav, .bar, .acts, .addrow, .help, .aura, .status, .toast { display: none !important; }
     body { background: #fff; font-size: 11px; }
     main { padding: 0; max-width: none; }
     .wrap { max-height: none; overflow: visible; box-shadow: none; border: 0; }
@@ -133,9 +229,10 @@
     thead th { position: static; }
     .c { min-height: 0; padding: 4px 6px; }
     td.need .c:empty { background: none; }
-    .c:empty::before { content: ""; }
+    td.need .c:empty::before { content: ""; }
     tbody { break-inside: avoid; }
     tbody.dim td, tr.dim td { opacity: 1 !important; }
+    td[class*="hl-"] { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
 </style>
 </head>
@@ -153,29 +250,58 @@
       <p class="kicker">11/7（六）北一區聯辦｜瑜珈頌缽公益療癒體驗</p>
       <h1>細流表</h1>
     </div>
-    <div class="save" id="save" aria-live="polite">內容存在這台電腦的瀏覽器裡</div>
+    <div class="status" id="status" aria-live="polite">讀取中…</div>
   </div>
 
   <div class="bar" role="toolbar" aria-label="表格工具">
-    <button class="btn primary" id="addBlk" type="button">＋ 新增時段</button>
-    <button class="btn" id="undo" type="button" title="⌘Z / Ctrl+Z" disabled>↶ 復原</button>
-    <button class="btn" id="redo" type="button" title="⌘⇧Z / Ctrl+Y" disabled>↷ 重做</button>
-    <span class="sep"></span>
-    <div class="search" id="searchBox">
-      <input id="q" type="search" placeholder="找人或關鍵字，例如：器材組" aria-label="篩選">
-      <button type="button" id="qx" aria-label="清除篩選">✕</button>
+    <div class="tools" id="tools" hidden>
+      <button class="btn primary" id="addBlk" type="button" aria-label="新增時段">＋<span class="addtxt"> 新增時段</span></button>
+      <button class="btn sq" id="undo" type="button" title="復原（⌘Z）" aria-label="復原" disabled>↶</button>
+      <button class="btn sq" id="redo" type="button" title="重做（⌘⇧Z）" aria-label="重做" disabled>↷</button>
+      <span class="sep"></span>
+      <div class="fill" role="group" aria-label="填色">
+        <span class="lbl">填色</span>
+        <button class="sw" type="button" data-sw="y" style="--c:var(--hl-y)" aria-label="黃色" aria-pressed="false"></button>
+        <button class="sw" type="button" data-sw="g" style="--c:var(--hl-g)" aria-label="綠色" aria-pressed="false"></button>
+        <button class="sw" type="button" data-sw="b" style="--c:var(--hl-b)" aria-label="藍色" aria-pressed="false"></button>
+        <button class="sw" type="button" data-sw="r" style="--c:var(--hl-r)" aria-label="紅色" aria-pressed="false"></button>
+        <button class="sw" type="button" data-sw="p" style="--c:var(--hl-p)" aria-label="紫色" aria-pressed="false"></button>
+        <button class="sw eraser" type="button" data-sw="x" aria-label="清除填色" aria-pressed="false"></button>
+      </div>
+      <span class="sep"></span>
     </div>
-    <select class="who" id="who" aria-label="看誰的工作"></select>
-    <span class="count" id="count"></span>
-    <span class="spacer"></span>
-    <button class="btn" id="copy" type="button" title="貼到 Google 試算表或 Excel">複製到試算表</button>
-    <button class="btn" id="csv" type="button">下載 Excel（CSV）</button>
-    <button class="btn" id="html" type="button" title="把目前內容存成一個 HTML 檔，可傳給別人">下載含內容的檔案</button>
-    <button class="btn" type="button" onclick="window.print()">列印</button>
-    <button class="btn" id="reset" type="button">還原原稿</button>
+    <div class="find">
+      <div class="search" id="searchBox">
+        <input id="q" type="search" placeholder="找人或關鍵字" aria-label="篩選">
+        <button type="button" id="qx" aria-label="清除篩選">✕</button>
+      </div>
+      <select class="who" id="who" aria-label="看誰的工作"></select>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="right">
+      <details class="more" id="more">
+        <summary class="btn">⋯ 更多</summary>
+        <div class="menu" role="menu">
+          <button type="button" role="menuitem" id="copy">複製到試算表</button>
+          <button type="button" role="menuitem" id="html">下載含內容的檔案</button>
+          <button type="button" role="menuitem" onclick="window.print()">列印</button>
+          <hr id="logoutSep" hidden>
+          <button type="button" role="menuitem" id="logout" hidden>這台裝置停用編輯</button>
+        </div>
+      </details>
+      <button class="btn primary" id="editBtn" type="button">✎ 編輯</button>
+    </div>
+    <div class="login" id="login" hidden>
+      <p>輸入編輯密碼。改的內容會同步給所有打開這頁的人。</p>
+      <form id="loginForm">
+        <input id="pass" type="password" autocomplete="current-password" aria-label="編輯密碼" placeholder="密碼">
+        <button class="btn primary" type="submit">確定</button>
+      </form>
+      <p class="err" id="loginErr"></p>
+    </div>
   </div>
 
-  <div class="wrap">
+  <div class="wrap" id="wrap">
     <table id="grid">
       <colgroup>
         <col style="width:52px"><col style="width:84px"><col style="width:128px"><col style="width:34px">
@@ -188,19 +314,17 @@
     </table>
   </div>
 
-  <div class="help">
+  <div class="help" id="help" hidden>
     <span>點格子直接打字</span>
     <span><kbd>Enter</kbd> 到下一列</span>
     <span><kbd>Shift</kbd>+<kbd>Enter</kbd> 格內換行</span>
     <span><kbd>Tab</kbd> 到右邊一格</span>
-    <span>滑到一列右側：新增／上下移／刪除</span>
-    <span>黃底＝人員還沒排</span>
+    <span>填色：點顏色後點或拖過格子，再點一次顏色（或 <kbd>Esc</kbd>）結束</span>
   </div>
 </main>
 <div class="toast" id="toast" role="status"></div>
 
-<script type="application/json" id="seed">
-{"title":"2026.11.07 北一區聯辦｜瑜珈頌缽公益療癒體驗 <細流>","blocks":[
+<script type="application/json" id="seed">{"title":"2026.11.07 北一區聯辦｜瑜珈頌缽公益療癒體驗 <細流>","blocks":[
  {"time":"11:00","name":"場佈","items":[
   {"content":"佛堂獻供、發爐、點佛燈","people":"辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿","place":"佛堂","gear":"供果","note":""},
   {"content":"瑜珈區空間淨空","people":"器材組：柏睿／芳誼","place":"","gear":"","note":""},
@@ -235,49 +359,145 @@
   {"content":"場地復原","people":"器材組","place":"","gear":"","note":""},
   {"content":"餐後收拾","people":"膳食組","place":"","gear":"","note":""},
   {"content":"收入結算","people":"","place":"","gear":"","note":""}]}
-]}
-</script>
+]}</script>
 
 <script>
 (() => {
-  const KEY = 'songbo1107:flow2';
+  const API = 'https://script.google.com/macros/s/AKfycbwGkMMOTZaLTaktjWnH3RQASu8He6cwSvNK5TP0Hz_gzzgoAb_5Ct7ZLqbqQmdm_uVZdg/exec';
+  const CACHE = 'songbo1107:flow3', KEYSTORE = 'songbo1107:editkey';
   const FIELDS = ['content', 'people', 'place', 'gear', 'note'];
-  const PH = { content: '內容', people: '待排', place: '', gear: '', note: '' };
+  const LABEL = { content: '內容', people: '人員', place: '地點', gear: '器材', note: '備註' };
+  const PH = { content: '內容', people: '', place: '', gear: '', note: '', time: '時間', name: '名稱' };
+  const COLORS = ['y', 'g', 'b', 'r', 'p'];
   const seed = JSON.parse(document.getElementById('seed').textContent);
-  const grid = document.getElementById('grid');
+  const grid = document.getElementById('grid'), wrap = document.getElementById('wrap');
   const $ = id => document.getElementById(id);
-
-  const store = {
-    get() { try { return JSON.parse(localStorage.getItem(KEY)); } catch (e) { return null; } },
-    set(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); return true; } catch (e) { return false; } },
-    del() { try { localStorage.removeItem(KEY); } catch (e) {} }
+  const ls = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+    del(k) { try { localStorage.removeItem(k); } catch (e) {} }
   };
   const clone = o => JSON.parse(JSON.stringify(o));
   const blankItem = () => ({ content: '', people: '', place: '', gear: '', note: '' });
 
-  let state = store.get() || clone(seed);
+  let cached = null; try { cached = JSON.parse(ls.get(CACHE)); } catch (e) {}
+  let state = cached?.state || clone(seed);
+  let rev = cached?.rev || 0;
+  let dirty = !!cached?.dirty;
+  let editKey = ls.get(KEYSTORE);
+  let editing = false, brush = null;
   let undoStack = [], redoStack = [];
-  let filter = '';
+  let filter = '', who = '';
 
-  /* ---------- history & save ---------- */
+  /* ---------- status ---------- */
+  function hhmm(d) { d = d ? new Date(d) : new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+  function status(kind, text) { const s = $('status'); s.className = 'status ' + kind; s.textContent = text; }
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2600); }
+
+  /* ---------- sync ---------- */
+  function cache() { ls.set(CACHE, JSON.stringify({ state, rev, dirty })); }
+  async function api(params, body) {
+    const url = API + (params ? '?' + new URLSearchParams(params) : '');
+    const r = await fetch(url, body ? { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) } : { cache: 'no-store' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    return r.json();
+  }
+  const isTyping = () => !!document.activeElement?.closest?.('.c');
+  let pendingPull = false;
+  async function pull() {
+    if (!API) return;
+    if (isTyping() || dirty) { pendingPull = !dirty; if (dirty) push(); return; }
+    try {
+      const r = await api({ action: 'get' });
+      if (!r.ok) throw new Error(r.error);
+      if (r.data && r.rev !== rev) { state = r.data; rev = r.rev; cache(); keepScroll(render); }
+      else if (!r.data) rev = r.rev;
+      status('ok', r.updatedAt ? `已同步・最後更新 ${hhmm(r.updatedAt)}` : '已同步');
+    } catch (e) { status('err', '連不上共用存檔，顯示這台上次看到的內容'); }
+  }
+  async function poll() {
+    if (!API || document.hidden || pushing) return;
+    if (dirty) return push();
+    try {
+      const r = await api({ action: 'rev' });
+      if (r.ok && r.rev !== rev) { if (isTyping()) pendingPull = true; else pull(); }
+      else if (r.ok) status('ok', r.updatedAt ? `已同步・最後更新 ${hhmm(r.updatedAt)}` : '已同步');
+    } catch (e) { status('err', '連線中斷，稍後自動重試'); }
+  }
+  let saveT, pushing = false, changeSeq = 0;
+  function save() {
+    changeSeq++; dirty = true; cache();
+    if (!API) { status('ok', `已存在這台電腦 ${hhmm()}`); dirty = false; cache(); return; }
+    status('busy', '儲存中…');
+    clearTimeout(saveT); saveT = setTimeout(push, 700);
+  }
+  async function push(force) {
+    if (!API || !editKey || pushing || !dirty) return;
+    pushing = true; const seq = changeSeq;
+    try {
+      const r = await api(null, { action: 'save', key: editKey, baseRev: rev, data: state, force: !!force });
+      if (r.ok) {
+        rev = r.rev; if (seq === changeSeq) dirty = false; cache();
+        status('ok', `已同步・最後更新 ${hhmm(r.updatedAt)}`);
+      } else if (r.error === 'conflict') {
+        pushing = false;
+        if (confirm('另一台裝置剛改過這張表。\n\n按「確定」：用你這台的版本蓋過去\n按「取消」：改看最新版本（你剛改的會不見）')) { rev = r.rev; return push(true); }
+        state = r.data; rev = r.rev; dirty = false; cache(); keepScroll(render); status('ok', '已換成最新版本');
+      } else if (r.error === 'auth') {
+        dropKey(); setEditing(false); status('err', '編輯密碼失效，改動只存在這台'); toast('編輯密碼不對，請按「編輯」重新輸入');
+      } else if (r.error === 'rate') { status('err', '嘗試太多次，請稍等幾分鐘'); }
+      else { status('err', '存檔被拒（' + r.error + '），改動先存在這台'); }
+    } catch (e) {
+      status('err', '離線中，改動先存在這台，連上後自動送出');
+    } finally { pushing = false; if (dirty && seq !== changeSeq) { clearTimeout(saveT); saveT = setTimeout(push, 400); } }
+  }
+  function keepScroll(fn) { const y = scrollY, t = wrap.scrollTop, l = wrap.scrollLeft; fn(); wrap.scrollTop = t; wrap.scrollLeft = l; scrollTo(0, y); }
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) poll(); });
+
+  /* ---------- edit mode ---------- */
+  function dropKey() { editKey = null; ls.del(KEYSTORE); }
+  function setEditing(on) {
+    editing = on; document.body.classList.toggle('editing', on);
+    $('tools').hidden = !on; $('help').hidden = !on;
+    $('editBtn').textContent = on ? '✓ 完成' : '✎ 編輯';
+    $('editBtn').classList.toggle('primary', !on);
+    $('logout').hidden = $('logoutSep').hidden = !(editKey && API);
+    if (!on) setBrush(null);
+    grid.querySelectorAll('.c').forEach(c => c.contentEditable = on ? 'plaintext-only' : 'false');
+    if (on) { const c = grid.querySelector('.c'); if (c && c.contentEditable !== 'plaintext-only') grid.querySelectorAll('.c').forEach(x => x.contentEditable = 'true'); }
+  }
+  $('editBtn').addEventListener('click', () => {
+    if (editing) { document.activeElement?.blur?.(); setEditing(false); return; }
+    if (!API || editKey) { setEditing(true); return; }
+    $('login').hidden = !$('login').hidden; $('loginErr').textContent = '';
+    if (!$('login').hidden) $('pass').focus();
+  });
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const key = $('pass').value.trim(); if (!key) return;
+    $('loginErr').textContent = '確認中…';
+    try {
+      const r = await api(null, { action: 'check', key });
+      if (r.ok) { editKey = key; ls.set(KEYSTORE, key); $('login').hidden = true; $('pass').value = ''; setEditing(true); toast('可以編輯了，改動會同步給大家'); if (dirty) push(); }
+      else $('loginErr').textContent = r.error === 'rate' ? '嘗試太多次，請稍等幾分鐘' : '密碼不對';
+    } catch (err) { $('loginErr').textContent = '連不上，請檢查網路'; }
+  });
+  $('logout').addEventListener('click', () => { dropKey(); setEditing(false); $('more').open = false; toast('這台裝置已停用編輯'); });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#more')) $('more').open = false;
+    if (!e.target.closest('#login, #editBtn')) $('login').hidden = true;
+  });
+
+  /* ---------- history ---------- */
   function snapshot() { undoStack.push(JSON.stringify(state)); if (undoStack.length > 200) undoStack.shift(); redoStack = []; syncHist(); }
   function syncHist() { $('undo').disabled = !undoStack.length; $('redo').disabled = !redoStack.length; }
-  let saveT;
-  function save() {
-    clearTimeout(saveT);
-    saveT = setTimeout(() => {
-      const ok = store.set(state);
-      const t = new Date();
-      $('save').innerHTML = ok ? '<b>✓ 已存</b>（這台電腦）' + String(t.getHours()).padStart(2, '0') + ':' + String(t.getMinutes()).padStart(2, '0')
-                               : '這個瀏覽器不能存，記得下載檔案';
-    }, 250);
-  }
-  function toast(msg) { const t = $('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2200); }
 
   /* ---------- render ---------- */
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const hlOf = (b, i, f) => (i < 0 ? state.blocks[b].hl : state.blocks[b].items[i].hl)?.[f] || '';
   const cell = (b, i, f, extra = '') =>
-    `<div class="c ${extra}" contenteditable="plaintext-only" spellcheck="false" data-b="${b}" data-i="${i}" data-f="${f}" data-ph="${esc(PH[f] ?? '')}">${esc(i < 0 ? state.blocks[b][f] : state.blocks[b].items[i][f])}</div>`;
+    `<div class="c ${extra}" contenteditable="${editing ? 'plaintext-only' : 'false'}" spellcheck="false" data-b="${b}" data-i="${i}" data-f="${f}" data-ph="${esc(PH[f] ?? '')}">${esc(i < 0 ? state.blocks[b][f] : state.blocks[b].items[i][f])}</div>`;
+  const hlc = (b, i, f) => { const h = hlOf(b, i, f); return h ? ' hl-' + h : ''; };
   const tmin = s => { const m = String(s).replace(/[：.]/g, ':').match(/^(\d{1,2}):?(\d{2})/); return m ? +m[1] * 60 + +m[2] : null; };
 
   function render(focus) {
@@ -291,19 +511,19 @@
       blk.items.forEach((it, i) => {
         html += `<tr class="${i === 0 ? 'first' : ''} ${blk.core ? 'core' : ''}" data-i="${i}">`;
         if (i === 0) {
-          html += `<td class="blk" rowspan="${n}"><div class="no">${b}</div>
+          html += `<td class="blk bno" rowspan="${n}"><div class="no">${b}</div>
             <div class="acts blk">
               <button class="ib" type="button" data-act="bup" title="時段上移" aria-label="時段上移">↑</button>
               <button class="ib" type="button" data-act="bdown" title="時段下移" aria-label="時段下移">↓</button>
               <button class="ib" type="button" data-act="badd" title="在下方插入時段" aria-label="在下方插入時段">＋</button>
               <button class="ib del" type="button" data-act="bdel" title="刪除整個時段" aria-label="刪除整個時段">✕</button>
             </div></td>
-            <td class="blk ${bad ? 'bad' : ''}" rowspan="${n}" ${bad ? 'title="時間比上一個時段早"' : ''}>${cell(b, -1, 'time', 'time')}</td>
-            <td class="blk" rowspan="${n}">${cell(b, -1, 'name', 'name')}</td>`;
+            <td class="blk btime ${bad ? 'bad' : ''}${hlc(b, -1, 'time')}" rowspan="${n}" ${bad ? 'title="時間比上一個時段早"' : ''}>${cell(b, -1, 'time', 'time')}</td>
+            <td class="blk bname${hlc(b, -1, 'name')}" rowspan="${n}">${cell(b, -1, 'name', 'name')}</td>`;
         }
-        html += `<td><div class="sn">${i + 1}</div></td>`;
-        FIELDS.forEach(f => { html += `<td class="${f === 'people' ? 'need' : ''}">${cell(b, i, f)}</td>`; });
-        html += `<td><div class="acts item">
+        html += `<td class="snc"><div class="sn">${i + 1}</div></td>`;
+        FIELDS.forEach(f => { html += `<td class="f ${f === 'people' ? 'need' : ''}${hlc(b, i, f)}" data-f="${f}" data-label="${LABEL[f]}">${cell(b, i, f)}</td>`; });
+        html += `<td class="ia"><div class="acts item">
             <button class="ib" type="button" data-act="iadd" title="在下方插入一列" aria-label="在下方插入一列">＋</button>
             <button class="ib" type="button" data-act="iup" title="上移" aria-label="上移">↑</button>
             <button class="ib" type="button" data-act="idown" title="下移" aria-label="下移">↓</button>
@@ -314,6 +534,7 @@
     });
     html += `<tbody class="addrow"><tr><td colspan="10"><button class="btn" type="button" data-act="bappend">＋ 在最後新增時段</button></td></tr></tbody>`;
     grid.insertAdjacentHTML('beforeend', html);
+    if (editing && grid.querySelector('.c')?.contentEditable !== 'plaintext-only') grid.querySelectorAll('.c').forEach(x => x.contentEditable = 'true');
     renderPeople();
     applyFilter();
     if (focus) {
@@ -324,7 +545,6 @@
   function placeEnd(el) { const r = document.createRange(); r.selectNodeContents(el); r.collapse(false); const s = getSelection(); s.removeAllRanges(); s.addRange(r); }
 
   /* ---------- who filter ---------- */
-  let who = '';
   const split = v => String(v).split(/[\n／/、,，；;]+/).map(x => x.trim()).filter(x => x && !/^\d+\.?$/.test(x));
   function roster() {
     const groups = new Map(), people = new Set();
@@ -337,10 +557,7 @@
     }));
     return { groups, people: [...people].filter(n => !groups.has(n)) };
   }
-  function tokensOf(v) {
-    const m = String(v).match(/^(.+?)[：:]([\s\S]+)$/);
-    return m ? [m[1].trim(), ...split(m[2])] : split(v);
-  }
+  function tokensOf(v) { const m = String(v).match(/^(.+?)[：:]([\s\S]+)$/); return m ? [m[1].trim(), ...split(m[2])] : split(v); }
   function whoMatch(it, groups) {
     if (!who) return true;
     const toks = tokensOf(it.people);
@@ -350,7 +567,7 @@
   function renderPeople() {
     const { groups, people } = roster(), sel = $('who');
     if (who && !groups.has(who) && !people.includes(who)) who = '';
-    sel.innerHTML = '<option value="">看誰的工作…</option>' +
+    sel.innerHTML = '<option value="">看誰的工作</option>' +
       '<optgroup label="組別">' + [...groups.keys()].map(g => `<option>${esc(g)}</option>`).join('') + '</optgroup>' +
       '<optgroup label="個人">' + people.map(n => `<option>${esc(n)}</option>`).join('') + '</optgroup>';
     sel.value = who;
@@ -364,7 +581,7 @@
     grid.querySelectorAll('.c').forEach(c => c.normalize());
     let hits = 0;
     grid.querySelectorAll('tbody[data-b]').forEach(tb => {
-      const b = +tb.dataset.b, blk = state.blocks[b];
+      const blk = state.blocks[+tb.dataset.b];
       const blkHit = !!q && [blk.time, blk.name].some(v => String(v).includes(q));
       let any = false;
       tb.querySelectorAll('tr').forEach(tr => {
@@ -376,6 +593,9 @@
         any = any || hit;
       });
       tb.classList.toggle('dim', active && !any);
+      // on phones, hide non-matching cards and rows entirely
+      tb.style.display = active && !any && matchMedia('(max-width: 760px)').matches ? 'none' : '';
+      tb.querySelectorAll('tr').forEach(tr => { tr.style.display = active && tr.classList.contains('dim') && !tr.classList.contains('first') && matchMedia('(max-width: 760px)').matches ? 'none' : ''; });
     });
     if (q) {
       grid.querySelectorAll('.c').forEach(c => {
@@ -386,12 +606,45 @@
     $('count').textContent = active ? `符合 ${hits} 列` : '';
     $('who').classList.toggle('on', !!who);
   }
-  function setFilter(v) { filter = v; $('q').value = v; applyFilter(); }
+  $('q').addEventListener('input', e => { filter = e.target.value; applyFilter(); });
+  $('qx').addEventListener('click', () => { filter = ''; $('q').value = ''; applyFilter(); $('q').focus(); });
+  $('who').addEventListener('change', e => { who = e.target.value; applyFilter(); });
+
+  /* ---------- fill brush ---------- */
+  function setBrush(c) {
+    brush = c; document.body.classList.toggle('painting', !!c);
+    document.querySelectorAll('.sw').forEach(s => s.setAttribute('aria-pressed', s.dataset.sw === c));
+    if (c) document.activeElement?.blur?.();
+  }
+  document.querySelectorAll('.sw').forEach(s => s.addEventListener('click', () => setBrush(brush === s.dataset.sw ? null : s.dataset.sw)));
+  let painting = false, paintMode = null, painted = false;
+  function paint(td) {
+    const c = td.querySelector('.c'); if (!c) return;
+    const b = +c.dataset.b, i = +c.dataset.i, f = c.dataset.f;
+    const host = i < 0 ? state.blocks[b] : state.blocks[b].items[i];
+    if (paintMode === null) paintMode = (brush === 'x' || host.hl?.[f] === brush) ? 'clear' : 'set';
+    if (!painted) { snapshot(); painted = true; }
+    host.hl = host.hl || {};
+    if (paintMode === 'clear') delete host.hl[f]; else host.hl[f] = brush;
+    if (!Object.keys(host.hl).length) delete host.hl;
+    COLORS.forEach(k => td.classList.remove('hl-' + k));
+    if (paintMode === 'set') td.classList.add('hl-' + brush);
+  }
+  grid.addEventListener('pointerdown', e => {
+    if (!brush) return;
+    const td = e.target.closest('td'); if (!td || !td.querySelector('.c')) return;
+    e.preventDefault(); painting = true; paintMode = null; painted = false; paint(td);
+  });
+  grid.addEventListener('pointerover', e => { if (painting && e.pointerType === 'mouse') { const td = e.target.closest('td'); if (td && td.querySelector('.c')) paint(td); } });
+  document.addEventListener('pointerup', () => { if (painting) { painting = false; if (painted) save(); } });
+  grid.addEventListener('mousedown', e => { if (brush) e.preventDefault(); });
+  grid.addEventListener('click', e => { if (brush && e.target.closest('.c')) e.preventDefault(); });
 
   /* ---------- editing ---------- */
   let editStart = null;
   grid.addEventListener('focusin', e => {
     const c = e.target.closest('.c'); if (!c) return;
+    if (brush) { c.blur(); return; }
     if (c.querySelector('mark')) { c.textContent = c.textContent; placeEnd(c); }
     editStart = JSON.stringify(state);
   });
@@ -399,8 +652,12 @@
     const c = e.target.closest('.c'); if (!c) return;
     if (editStart && editStart !== JSON.stringify(state)) { undoStack.push(editStart); redoStack = []; syncHist(); }
     editStart = null;
-    if (c.dataset.f === 'time' || c.dataset.f === 'people') setTimeout(() => { if (!grid.contains(document.activeElement) || !document.activeElement.closest('.c')) render(); else softRefresh(); }, 0);
-    else if (filter) setTimeout(applyFilter, 0);
+    setTimeout(() => {
+      if (isTyping()) { if (c.dataset.f === 'time' || c.dataset.f === 'people') softRefresh(); return; }
+      if (pendingPull) { pendingPull = false; pull(); }
+      else if (c.dataset.f === 'time' || c.dataset.f === 'people') keepScroll(render);
+      else if (filter || who) applyFilter();
+    }, 0);
   });
   function softRefresh() {
     renderPeople(); applyFilter();
@@ -412,7 +669,7 @@
     });
   }
   grid.addEventListener('input', e => {
-    const c = e.target.closest('.c'); if (!c) return;
+    const c = e.target.closest('.c'); if (!c || !editing) return;
     const b = +c.dataset.b, i = +c.dataset.i, f = c.dataset.f;
     let v = c.innerText.replace(/\n$/, '');
     if (!v.trim()) { v = ''; if (c.innerHTML) c.innerHTML = ''; }
@@ -420,36 +677,27 @@
     save();
   });
   grid.addEventListener('paste', e => {
-    const c = e.target.closest('.c'); if (!c) return;
+    const c = e.target.closest('.c'); if (!c || !editing) return;
     e.preventDefault();
-    const text = (e.clipboardData.getData('text/plain') || '').replace(/\r\n?/g, '\n');
-    document.execCommand('insertText', false, text);
+    document.execCommand('insertText', false, (e.clipboardData.getData('text/plain') || '').replace(/\r\n?/g, '\n'));
   });
   grid.addEventListener('keydown', e => {
     const c = e.target.closest('.c'); if (!c) return;
-    if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.isComposing && e.keyCode !== 229) {
-      e.preventDefault();
-      moveDown(c, e.metaKey || e.ctrlKey);
-    } else if (e.key === 'Escape') { c.blur(); }
+    if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); moveDown(c); }
+    else if (e.key === 'Escape') c.blur();
   });
-  function moveDown(c, insert) {
+  function moveDown(c) {
     const b = +c.dataset.b, i = +c.dataset.i, f = c.dataset.f;
-    if (i < 0) { // block field → first item's content
-      const el = grid.querySelector(`.c[data-b="${b}"][data-i="0"][data-f="content"]`); el && (el.focus(), placeEnd(el)); return;
-    }
-    const blk = state.blocks[b];
-    if (insert) {
-      c.blur(); snapshot(); blk.items.splice(i + 1, 0, blankItem()); save(); render({ b, i: i + 1, f }); return;
-    }
+    if (i < 0) { const el = grid.querySelector(`.c[data-b="${b}"][data-i="0"][data-f="content"]`); el && (el.focus(), placeEnd(el)); return; }
     let nb = b, ni = i + 1;
-    if (ni >= blk.items.length) { nb = b + 1; ni = 0; }
+    if (ni >= state.blocks[b].items.length) { nb = b + 1; ni = 0; }
     const el = grid.querySelector(`.c[data-b="${nb}"][data-i="${ni}"][data-f="${f}"]`);
     if (el) { el.focus(); placeEnd(el); } else c.blur();
   }
 
   /* ---------- row actions ---------- */
-  document.addEventListener('click', e => {
-    const btn = e.target.closest('[data-act]'); if (!btn) return;
+  grid.addEventListener('click', e => {
+    const btn = e.target.closest('[data-act]'); if (!btn || !editing) return;
     const tb = btn.closest('tbody'), tr = btn.closest('tr');
     const b = tb && tb.dataset.b !== undefined ? +tb.dataset.b : -1;
     const i = tr && tr.dataset.i !== undefined ? +tr.dataset.i : -1;
@@ -477,39 +725,33 @@
       default: changed = false;
     }
     if (!changed) { undoStack.pop(); syncHist(); return; }
-    save(); render(focus);
+    save(); keepScroll(() => render(focus));
   });
-  $('addBlk').addEventListener('click', () => { snapshot(); state.blocks.push({ time: '', name: '', items: [blankItem()] }); save(); render({ b: state.blocks.length - 1, i: -1, f: 'time' }); $('grid').closest('.wrap').scrollTop = 1e6; });
+  $('addBlk').addEventListener('click', () => {
+    snapshot(); state.blocks.push({ time: '', name: '', items: [blankItem()] }); save();
+    render({ b: state.blocks.length - 1, i: -1, f: 'time' });
+    grid.querySelector('tbody[data-b]:last-of-type')?.scrollIntoView({ block: 'center' });
+  });
 
-  function undo() { if (!undoStack.length) return; redoStack.push(JSON.stringify(state)); state = JSON.parse(undoStack.pop()); syncHist(); save(); render(); toast('已復原'); }
-  function redo() { if (!redoStack.length) return; undoStack.push(JSON.stringify(state)); state = JSON.parse(redoStack.pop()); syncHist(); save(); render(); toast('已重做'); }
+  function undo() { if (!undoStack.length) return; redoStack.push(JSON.stringify(state)); state = JSON.parse(undoStack.pop()); syncHist(); save(); keepScroll(render); toast('已復原'); }
+  function redo() { if (!redoStack.length) return; undoStack.push(JSON.stringify(state)); state = JSON.parse(redoStack.pop()); syncHist(); save(); keepScroll(render); toast('已重做'); }
   $('undo').addEventListener('click', undo);
   $('redo').addEventListener('click', redo);
   document.addEventListener('keydown', e => {
-    if (document.activeElement && document.activeElement.closest('.c, input')) return; // native undo while typing
+    if (e.key === 'Escape' && brush) { setBrush(null); return; }
+    if (!editing || document.activeElement?.closest?.('.c, input')) return;
     const mod = e.metaKey || e.ctrlKey; if (!mod) return;
     const k = e.key.toLowerCase();
     if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
     else if ((k === 'z' && e.shiftKey) || k === 'y') { e.preventDefault(); redo(); }
   });
 
-  /* ---------- filter controls ---------- */
-  $('q').addEventListener('input', e => { filter = e.target.value; applyFilter(); });
-  $('qx').addEventListener('click', () => { setFilter(''); $('q').focus(); });
-  $('who').addEventListener('change', e => { who = e.target.value; applyFilter(); });
-
   /* ---------- export ---------- */
   const COLS = ['編號', '時間', '活動名稱', '活動內容', '人員安排', '地點', '器材', '備註'];
   const numbered = (items, f) => items.length === 1 ? items[0][f] : items.map((it, k) => it[f] ? `${k + 1}.${it[f]}` : '').join('\n').replace(/\n+$/, '');
-  function rows() {
-    return state.blocks.map((blk, b) => [String(b), blk.time, blk.name, ...FIELDS.map(f => numbered(blk.items, f))]);
-  }
-  $('csv').addEventListener('click', () => {
-    const q = v => /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
-    const out = [[state.title || seed.title], COLS, ...rows()].map(r => r.map(v => q(String(v ?? ''))).join(',')).join('\r\n');
-    download('﻿' + out, '細流表_1107.csv', 'text/csv;charset=utf-8');
-  });
+  const rows = () => state.blocks.map((blk, b) => [String(b), blk.time, blk.name, ...FIELDS.map(f => numbered(blk.items, f))]);
   $('copy').addEventListener('click', async () => {
+    $('more').open = false;
     const r = rows();
     const h = '<table><tr>' + COLS.map(c => `<th>${c}</th>`).join('') + '</tr>' +
       r.map(row => '<tr>' + row.map(v => `<td>${esc(v).replace(/\n/g, '<br>')}</td>`).join('') + '</tr>').join('') + '</table>';
@@ -518,27 +760,27 @@
       await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([h], { type: 'text/html' }), 'text/plain': new Blob([t], { type: 'text/plain' }) })]);
       toast('已複製，到試算表點一格按貼上');
     } catch (err) {
-      try { await navigator.clipboard.writeText(t); toast('已複製（純文字）'); } catch (e2) { toast('這個瀏覽器不讓複製，改用下載 Excel'); }
+      try { await navigator.clipboard.writeText(t); toast('已複製（純文字）'); } catch (e2) { toast('這個瀏覽器不讓複製'); }
     }
   });
   $('html').addEventListener('click', () => {
+    $('more').open = false;
     const doc = document.documentElement.cloneNode(true);
-    doc.querySelector('#seed').textContent = '\n' + JSON.stringify(state) + '\n';
+    doc.querySelector('#seed').textContent = JSON.stringify(state);
     doc.querySelectorAll('#grid tbody').forEach(t => t.remove());
     doc.querySelector('#who').innerHTML = '';
-    download('<!doctype html>\n' + doc.outerHTML, '細流表_1107.html', 'text/html');
+    doc.querySelector('body').classList.remove('editing', 'painting');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['<!doctype html>\n' + doc.outerHTML], { type: 'text/html' }));
+    a.download = '細流表_1107.html'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
-  $('reset').addEventListener('click', () => {
-    if (!confirm('把表格還原成原稿？這台電腦上改過的內容會被蓋掉（還原後仍可按「復原」救回）。')) return;
-    snapshot(); state = clone(seed); store.del(); render(); toast('已還原原稿');
-  });
-  function download(text, name, type) {
-    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name;
-    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  }
 
+  /* ---------- start ---------- */
   render();
-  if (store.get()) $('save').textContent = '已載入這台電腦上次存的內容';
+  setEditing(false);
+  if (API) { status('busy', '連線中…'); pull(); setInterval(poll, 8000); }
+  else status('ok', '內容存在這台電腦');
 })();
 </script>
 </body>
