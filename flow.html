@@ -325,7 +325,8 @@
           <button type="button" role="menuitem" id="openRoster">人員名冊</button>
           <hr>
           <button type="button" role="menuitem" id="copy">複製到試算表</button>
-          <button type="button" role="menuitem" id="html">下載含內容的檔案</button>
+          <button type="button" role="menuitem" id="xlsx">下載 Excel</button>
+          <button type="button" role="menuitem" id="html">下載網頁版（離線看）</button>
           <button type="button" role="menuitem" onclick="window.print()">列印</button>
           <hr id="logoutSep" hidden>
           <button type="button" role="menuitem" id="logout" hidden>這台裝置停用編輯</button>
@@ -904,6 +905,85 @@
     } catch (err) {
       try { await navigator.clipboard.writeText(t); toast('已複製（純文字）'); } catch (e2) { toast('這個瀏覽器不讓複製'); }
     }
+  });
+  /* real .xlsx: one row per 小項, 時段 cells merged, highlights kept */
+  const crcT = (() => { const t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  const crc32 = u => { let c = 0xFFFFFFFF; for (let i = 0; i < u.length; i++) c = crcT[(c ^ u[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  function zip(files) {
+    const enc = new TextEncoder(), parts = [], cen = []; let off = 0;
+    const u16 = v => [v & 255, v >>> 8 & 255], u32 = v => [v & 255, v >>> 8 & 255, v >>> 16 & 255, v >>> 24 & 255];
+    for (const [name, text] of files) {
+      const n = enc.encode(name), d = enc.encode(text), c = crc32(d);
+      const common = [...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(c), ...u32(d.length), ...u32(d.length), ...u16(n.length), ...u16(0)];
+      const lh = new Uint8Array([...u32(0x04034b50), ...common]);
+      parts.push(lh, n, d);
+      cen.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...common, ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]), n);
+      off += lh.length + n.length + d.length;
+    }
+    const cl = cen.reduce((a, x) => a + x.length, 0);
+    return new Blob([...parts, ...cen, new Uint8Array([...u32(0x06054b50), 0, 0, 0, 0, ...u16(files.length), ...u16(files.length), ...u32(cl), ...u32(off), 0, 0])],
+      { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  }
+  $('xlsx').addEventListener('click', () => {
+    $('more').open = false;
+    const HL = ['y', 'g', 'b', 'r', 'p'], HEX = { y: 'FFE07A', g: 'BFE6B3', b: 'BCD6F5', r: 'F7B9B2', p: 'DCCBF3' };
+    const xs = h => 3 + (h && HEX[h] ? HL.indexOf(h) + 1 : 0);   // 3 = plain body, 4..8 = highlighted
+    const col = k => String.fromCharCode(65 + k);
+    const x = v => String(v ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+    const cell = (r, k, v, st) => `<c r="${col(k)}${r}" s="${st}" t="inlineStr"><is><t xml:space="preserve">${x(v)}</t></is></c>`;
+    const out = [], merges = [];
+    out.push(`<row r="1" ht="28" customHeight="1">${cell(1, 0, state.title || '細流表', 1)}</row>`);
+    merges.push('A1:H1');
+    out.push(`<row r="2" ht="22" customHeight="1">${COLS.map((c, k) => cell(2, k, c, 2)).join('')}</row>`);
+    let r = 3;
+    state.blocks.forEach((blk, b) => {
+      const n = blk.items.length;
+      blk.items.forEach((it, i) => {
+        const multi = n > 1;
+        const head = i === 0 ? [String(b), blk.time, blk.name] : ['', '', ''];
+        const hs = [xs(), xs(hlOf(b, -1, 'time')), xs(hlOf(b, -1, 'name'))];
+        let row = head.map((v, k) => cell(r, k, v, hs[k])).join('');
+        row += FIELDS.map((f, k) => cell(r, k + 3, (multi && f === 'content' && it[f] ? `${i + 1}. ` : '') + (it[f] || ''), xs(hlOf(b, i, f)))).join('');
+        out.push(`<row r="${r}">${row}</row>`);
+        r++;
+      });
+      if (n > 1) ['A', 'B', 'C'].forEach(c => merges.push(`${c}${r - n}:${c}${r - 1}`));
+    });
+    const widths = [6, 9, 14, 36, 22, 12, 20, 30];
+    const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>
+<sheetViews><sheetView workbookViewId="0"><pane ySplit="2" topLeftCell="A3" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>
+<cols>${widths.map((w, k) => `<col min="${k + 1}" max="${k + 1}" width="${w}" customWidth="1"/>`).join('')}</cols>
+<sheetData>${out.join('')}</sheetData>
+<mergeCells count="${merges.length}">${merges.map(m => `<mergeCell ref="${m}"/>`).join('')}</mergeCells>
+<pageMargins left="0.4" right="0.4" top="0.5" bottom="0.5" header="0.3" footer="0.3"/>
+<pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+    const bd = '<border><left style="thin"><color rgb="FFBBBBBB"/></left><right style="thin"><color rgb="FFBBBBBB"/></right><top style="thin"><color rgb="FFBBBBBB"/></top><bottom style="thin"><color rgb="FFBBBBBB"/></bottom><diagonal/></border>';
+    const fill = h => `<fill><patternFill patternType="solid"><fgColor rgb="FF${h}"/><bgColor indexed="64"/></patternFill></fill>`;
+    const body = f => `<xf numFmtId="0" fontId="0" fillId="${f}" borderId="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf>`;
+    const styles = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<fonts count="3"><font><sz val="11"/><name val="Microsoft JhengHei"/></font><font><b/><sz val="14"/><name val="Microsoft JhengHei"/></font><font><b/><sz val="11"/><name val="Microsoft JhengHei"/></font></fonts>
+<fills count="8"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>${fill('EEEAF6')}${HL.map(h => fill(HEX[h])).join('')}</fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>${bd}</borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="9"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="2" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+${body(0)}${HL.map((h, k) => body(3 + k)).join('')}</cellXfs>
+<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+    const blob = zip([
+      ['[Content_Types].xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'],
+      ['_rels/.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+      ['xl/workbook.xml', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="細流表" sheetId="1" r:id="rId1"/></sheets><definedNames><definedName name="_xlnm.Print_Titles" localSheetId="0">細流表!$2:$2</definedName></definedNames></workbook>'],
+      ['xl/_rels/workbook.xml.rels', '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+      ['xl/styles.xml', styles],
+      ['xl/worksheets/sheet1.xml', sheet],
+    ]);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '細流表_1107.xlsx'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
   $('html').addEventListener('click', () => {
     $('more').open = false;
