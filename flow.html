@@ -159,6 +159,44 @@
 
   @media (prefers-reduced-motion: reduce) { .aura span { animation: none; } }
 
+  /* autocomplete */
+  .ac { position: fixed; z-index: 45; background: #fff; border-radius: 10px; padding: 4px; min-width: 210px; max-width: 320px; max-height: 280px; overflow: auto;
+    box-shadow: 0 16px 36px -12px rgba(43, 42, 85, .4), 0 0 0 1px var(--line); }
+  .ac div { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; padding: 8px 10px; border-radius: 7px; cursor: pointer; font-size: 14.5px; }
+  .ac div.on, .ac div:hover { background: #F4F1FA; }
+  .ac small { color: #8E8BB0; font-size: 12.5px; white-space: nowrap; }
+  .ac .grp { font-weight: 600; }
+
+  /* roster dialog */
+  dialog.roster { border: 0; border-radius: 18px; padding: 0; width: min(760px, calc(100vw - 24px)); max-height: 86vh; color: var(--ink);
+    box-shadow: 0 30px 70px -20px rgba(43, 42, 85, .5); }
+  dialog.roster::backdrop { background: rgba(43, 42, 85, .35); backdrop-filter: blur(2px); }
+  .rh { position: sticky; top: 0; background: #fff; padding: 18px 20px 12px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; gap: 12px; z-index: 1; }
+  .rh h2 { font-family: var(--serif); font-size: 22px; margin: 0; }
+  .rh p { margin: 2px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+  .rh .x { margin-left: auto; flex: none; width: 34px; height: 34px; border-radius: 50%; }
+  .rb { padding: 6px 20px 20px; }
+  .rt { width: 100%; min-width: 0; border-collapse: collapse; table-layout: fixed; }
+  .rt thead th { position: static; background: none; border: 0; white-space: normal; }
+  .rt td { border-right: 0; }
+  .rt th { text-align: left; font-size: 13px; color: var(--ink-soft); font-weight: 500; padding: 8px 6px; }
+  .rt td { padding: 4px 6px; border-top: 1px solid var(--line); vertical-align: middle; }
+  .rt input { width: 100%; height: 36px; border: 1px solid transparent; border-radius: 7px; padding: 0 8px; font: inherit; font-size: 15px; background: transparent; color: var(--ink); }
+  body.editing .rt input { border-color: var(--line); background: #FCFBFE; }
+  .rt input:focus { outline: none; border-color: var(--gold); background: #fff; }
+  .rt input:disabled { -webkit-text-fill-color: var(--ink); opacity: 1; }
+  .rt .del { visibility: hidden; }
+  body.editing .rt .del { visibility: visible; }
+  .radd { margin-top: 12px; }
+  @media (max-width: 600px) {
+    .rt thead { display: none; }
+    .rt, .rt tbody { display: block; }
+    .rt tr { display: grid; grid-template-columns: 1fr 1fr 40px; gap: 4px; padding: 8px 0; border-top: 1px solid var(--line); }
+    .rt td { border: 0; padding: 0; }
+    .rt td.ral { grid-column: 1 / 3; grid-row: 2; }
+    .rt input { height: 40px; }
+  }
+
   /* ---------- phone: card list ---------- */
   @media (max-width: 760px) {
     main { padding: 14px 12px 40px; }
@@ -283,6 +321,8 @@
       <details class="more" id="more">
         <summary class="btn">⋯ 更多</summary>
         <div class="menu" role="menu">
+          <button type="button" role="menuitem" id="openRoster">人員名冊</button>
+          <hr>
           <button type="button" role="menuitem" id="copy">複製到試算表</button>
           <button type="button" role="menuitem" id="html">下載含內容的檔案</button>
           <button type="button" role="menuitem" onclick="window.print()">列印</button>
@@ -324,43 +364,23 @@
   </div>
 </main>
 <div class="toast" id="toast" role="status"></div>
+<div class="ac" id="ac" role="listbox" hidden></div>
+<dialog class="roster" id="roster" aria-labelledby="rosterTitle">
+  <div class="rh">
+    <div><h2 id="rosterTitle">人員名冊</h2><p>每人登記一次。同一個人的其他寫法（全名、職稱）填在中間，用「、」分開；篩選和打字選單都會認得。</p></div>
+    <button class="btn sq x" type="button" id="rosterClose" aria-label="關閉">✕</button>
+  </div>
+  <div class="rb">
+    <table class="rt">
+      <colgroup><col style="width:26%"><col><col style="width:28%"><col style="width:44px"></colgroup>
+      <thead><tr><th>名字（表格裡用的寫法）</th><th>其他寫法</th><th>組別</th><th></th></tr></thead>
+      <tbody id="rosterRows"></tbody>
+    </table>
+    <button class="btn radd" type="button" id="rosterAdd" hidden>＋ 新增一位</button>
+  </div>
+</dialog>
 
-<script type="application/json" id="seed">{"title":"2026.11.07 北一區聯辦｜瑜珈頌缽公益療癒體驗 <細流>","blocks":[
- {"time":"11:00","name":"場佈","items":[
-  {"content":"佛堂獻供、發爐、點佛燈","people":"辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿","place":"佛堂","gear":"供果","note":""},
-  {"content":"瑜珈區空間淨空","people":"器材組：柏睿／芳誼","place":"","gear":"","note":""},
-  {"content":"頌缽區位置","people":"器材組","place":"","gear":"","note":""},
-  {"content":"音響、麥克風測試","people":"器材組","place":"","gear":"音響、麥克風","note":""},
-  {"content":"報到桌、名單、零錢","people":"報到組：芳誼／曉莉","place":"","gear":"長桌、名單、零錢","note":""},
-  {"content":"用餐區與茶水","people":"膳食組：淑怡講師／妙芳","place":"","gear":"","note":""},
-  {"content":"場佈人員午餐","people":"","place":"","gear":"","note":"自備或統一訂便當"}]},
- {"time":"13:30","name":"報到","items":[
-  {"content":"報到、名單核對","people":"報到組：芳誼／曉莉","place":"","gear":"名單","note":""},
-  {"content":"收費 $300","people":"報到組","place":"","gear":"零錢","note":""},
-  {"content":"引導入座、回報人數","people":"報到組","place":"","gear":"","note":"提醒學員自備瑜珈墊"},
-  {"content":"茶水","people":"膳食組","place":"","gear":"","note":""}]},
- {"time":"14:00","name":"流動瑜珈","core":true,"items":[
-  {"content":"帶領流動瑜珈","people":"詠真老師","place":"","gear":"","note":""},
-  {"content":"主持、控時、對接老師","people":"活動組：維宸講師／美華","place":"","gear":"麥克風","note":""},
-  {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"瑜珈墊","note":"體驗人員 15 人"},
-  {"content":"音響、音樂","people":"器材組","place":"","gear":"","note":""}]},
- {"time":"15:00","name":"頌缽音療","core":true,"items":[
-  {"content":"帶領頌缽音療","people":"詩涵老師","place":"","gear":"頌缽","note":""},
-  {"content":"主持、控時","people":"活動組","place":"","gear":"麥克風","note":""},
-  {"content":"體驗人員一起參加","people":"體驗人員","place":"","gear":"","note":""}]},
- {"time":"16:00","name":"祈福","items":[
-  {"content":"祈福儀式","people":"辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿","place":"佛堂","gear":"","note":"自由參加"},
-  {"content":"上下執禮","people":"","place":"佛堂","gear":"","note":""},
-  {"content":"三寶","people":"","place":"佛堂","gear":"","note":""},
-  {"content":"點道點傳師","people":"","place":"佛堂","gear":"","note":""},
-  {"content":"不參加祈福的學員","people":"","place":"","gear":"","note":""}]},
- {"time":"17:00","name":"晚餐","items":[
-  {"content":"備餐、供餐","people":"膳食組：淑怡講師／妙芳","place":"","gear":"","note":""}]},
- {"time":"18:00","name":"場復","items":[
-  {"content":"場地復原","people":"器材組","place":"","gear":"","note":""},
-  {"content":"餐後收拾","people":"膳食組","place":"","gear":"","note":""},
-  {"content":"收入結算","people":"","place":"","gear":"","note":""}]}
-]}</script>
+<script type="application/json" id="seed">{"title": "2026.11.07 北一區聯辦｜瑜珈頌缽公益療癒體驗 <細流>", "blocks": [{"time": "11:00", "name": "場佈", "items": [{"content": "佛堂獻供、發爐、點佛燈", "people": "辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿", "place": "佛堂", "gear": "供果", "note": ""}, {"content": "瑜珈區空間淨空", "people": "器材組：柏睿／芳誼", "place": "", "gear": "", "note": ""}, {"content": "頌缽區位置", "people": "器材組", "place": "", "gear": "", "note": ""}, {"content": "音響、麥克風測試", "people": "器材組", "place": "", "gear": "音響、麥克風", "note": ""}, {"content": "報到桌、名單、零錢", "people": "報到組：芳誼／曉莉", "place": "", "gear": "長桌、名單、零錢", "note": ""}, {"content": "用餐區與茶水", "people": "膳食組：淑怡講師／妙芳", "place": "", "gear": "", "note": ""}, {"content": "場佈人員午餐", "people": "", "place": "", "gear": "", "note": "自備或統一訂便當"}]}, {"time": "13:30", "name": "報到", "items": [{"content": "報到、名單核對", "people": "報到組：芳誼／曉莉", "place": "", "gear": "名單", "note": ""}, {"content": "收費 $300", "people": "報到組", "place": "", "gear": "零錢", "note": ""}, {"content": "引導入座、回報人數", "people": "報到組", "place": "", "gear": "", "note": "提醒學員自備瑜珈墊"}, {"content": "茶水", "people": "膳食組", "place": "", "gear": "", "note": ""}]}, {"time": "14:00", "name": "流動瑜珈", "core": true, "items": [{"content": "帶領流動瑜珈", "people": "詠真老師", "place": "", "gear": "", "note": ""}, {"content": "主持、控時、對接老師", "people": "活動組：維宸講師／美華", "place": "", "gear": "麥克風", "note": ""}, {"content": "體驗人員一起參加", "people": "體驗人員", "place": "", "gear": "瑜珈墊", "note": "體驗人員 15 人"}, {"content": "音響、音樂", "people": "器材組", "place": "", "gear": "", "note": ""}]}, {"time": "15:00", "name": "頌缽音療", "core": true, "items": [{"content": "帶領頌缽音療", "people": "詩涵老師", "place": "", "gear": "頌缽", "note": ""}, {"content": "主持、控時", "people": "活動組", "place": "", "gear": "麥克風", "note": ""}, {"content": "體驗人員一起參加", "people": "體驗人員", "place": "", "gear": "", "note": ""}]}, {"time": "16:00", "name": "祈福", "items": [{"content": "祈福儀式", "people": "辦道組：王壇主／淑怡／福順／秉杰／榮彬／柏睿", "place": "佛堂", "gear": "", "note": "自由參加"}, {"content": "上下執禮", "people": "", "place": "佛堂", "gear": "", "note": ""}, {"content": "三寶", "people": "", "place": "佛堂", "gear": "", "note": ""}, {"content": "點道點傳師", "people": "", "place": "佛堂", "gear": "", "note": ""}, {"content": "不參加祈福的學員", "people": "", "place": "", "gear": "", "note": ""}]}, {"time": "17:00", "name": "晚餐", "items": [{"content": "備餐、供餐", "people": "膳食組：淑怡講師／妙芳", "place": "", "gear": "", "note": ""}]}, {"time": "18:00", "name": "場復", "items": [{"content": "場地復原", "people": "器材組", "place": "", "gear": "", "note": ""}, {"content": "餐後收拾", "people": "膳食組", "place": "", "gear": "", "note": ""}, {"content": "收入結算", "people": "", "place": "", "gear": "", "note": ""}]}], "roster": [{"name": "芳誼", "alias": "朱芳誼", "group": "報到組、器材組"}, {"name": "曉莉", "alias": "胡曉莉", "group": "報到組"}, {"name": "淑怡講師", "alias": "劉淑怡、劉淑怡講師", "group": "膳食組"}, {"name": "妙芳", "alias": "郭妙芳", "group": "膳食組"}, {"name": "維宸講師", "alias": "蔡維宸、維宸、蔡維宸講師", "group": "活動組"}, {"name": "美華", "alias": "陳美華", "group": "活動組"}, {"name": "柏睿", "alias": "林柏睿", "group": "器材組、辦道組"}, {"name": "王壇主", "alias": "", "group": "辦道組"}, {"name": "淑怡", "alias": "方淑怡", "group": "辦道組"}, {"name": "福順", "alias": "", "group": "辦道組"}, {"name": "秉杰", "alias": "", "group": "辦道組"}, {"name": "榮彬", "alias": "", "group": "辦道組"}, {"name": "鄭領導", "alias": "", "group": "顧問"}, {"name": "詠真老師", "alias": "詠真", "group": "老師"}, {"name": "詩涵老師", "alias": "詩涵", "group": "老師"}]}</script>
 
 <script>
 (() => {
@@ -547,36 +567,53 @@
 
   /* ---------- who filter ---------- */
   const split = v => String(v).split(/[\n／/、,，；;]+/).map(x => x.trim()).filter(x => x && !/^\d+\.?$/.test(x));
-  function roster() {
-    const groups = new Map(), people = new Set();
+  function ensureRoster() { if (!Array.isArray(state.roster)) state.roster = clone(seed.roster || []); }
+  function tokensOf(v) { const m = String(v).match(/^(.+?)[：:]([\s\S]+)$/); return m ? [m[1].trim(), ...split(m[2])] : split(v); }
+  function rosterIndex() {
+    ensureRoster();
+    const people = state.roster.filter(p => String(p.name).trim()).map(p => {
+      const name = String(p.name).trim();
+      return { name, keys: new Set([name, ...split(p.alias)]), groups: split(p.group) };
+    });
+    const members = new Map(), add = (g, k) => { if (!members.has(g)) members.set(g, new Set()); if (k) members.get(g).add(k); };
+    people.forEach(p => p.groups.forEach(g => { add(g); p.keys.forEach(k => add(g, k)); }));
+    const known = new Set(); people.forEach(p => p.keys.forEach(k => known.add(k)));
+    const extra = new Set();
     state.blocks.forEach(blk => blk.items.forEach(it => {
       const m = String(it.people).match(/^(.+?)[：:]([\s\S]+)$/);
-      if (m) {
-        const g = m[1].trim(); if (!groups.has(g)) groups.set(g, new Set());
-        split(m[2]).forEach(n => { groups.get(g).add(n); people.add(n); });
-      } else split(it.people).forEach(t => { if (/(組|人員)$/.test(t)) { if (!groups.has(t)) groups.set(t, new Set()); } else people.add(t); });
+      if (m) { const g = m[1].trim(); split(m[2]).forEach(k => add(g, k)); }
     }));
-    return { groups, people: [...people].filter(n => !groups.has(n)) };
+    state.blocks.forEach(blk => blk.items.forEach(it => tokensOf(it.people).forEach(t => {
+      if (known.has(t) || members.has(t)) return;
+      if (/(組|人員)$/.test(t)) add(t); else extra.add(t);
+    })));
+    return { people, members, extra: [...extra] };
   }
-  function tokensOf(v) { const m = String(v).match(/^(.+?)[：:]([\s\S]+)$/); return m ? [m[1].trim(), ...split(m[2])] : split(v); }
-  function whoMatch(it, groups) {
-    if (!who) return true;
-    const toks = tokensOf(it.people);
-    if (toks.includes(who)) return true;
-    return [...groups].some(([g, mem]) => mem.has(who) && toks.includes(g));
+  function matchSet(idx) {
+    if (!who) return null;
+    const kind = who.slice(0, 2), v = who.slice(2), set = new Set();
+    const groupsHaving = keys => [...idx.members].filter(([, mem]) => [...keys].some(k => mem.has(k))).map(([g]) => g);
+    if (kind === 'p:') { const p = idx.people.find(x => x.name === v); const keys = p ? p.keys : new Set([v]); keys.forEach(k => set.add(k)); groupsHaving(keys).forEach(g => set.add(g)); }
+    else if (kind === 'g:') { set.add(v); (idx.members.get(v) || []).forEach(k => set.add(k)); }
+    else { set.add(v); groupsHaving([v]).forEach(g => set.add(g)); }
+    return set;
   }
+  function whoMatch(it, set) { return !set || tokensOf(it.people).some(t => set.has(t)); }
   function renderPeople() {
-    const { groups, people } = roster(), sel = $('who');
-    if (who && !groups.has(who) && !people.includes(who)) who = '';
+    const idx = rosterIndex(), sel = $('who');
+    const opts = [...[...idx.members.keys()].map(g => 'g:' + g), ...idx.people.map(p => 'p:' + p.name), ...idx.extra.map(t => 'x:' + t)];
+    if (who && !opts.includes(who)) who = '';
+    const o = v => `<option value="${esc(v)}">${esc(v.slice(2))}</option>`;
     sel.innerHTML = '<option value="">看誰的工作</option>' +
-      '<optgroup label="組別">' + [...groups.keys()].map(g => `<option>${esc(g)}</option>`).join('') + '</optgroup>' +
-      '<optgroup label="個人">' + people.map(n => `<option>${esc(n)}</option>`).join('') + '</optgroup>';
+      '<optgroup label="組別">' + [...idx.members.keys()].map(g => o('g:' + g)).join('') + '</optgroup>' +
+      '<optgroup label="人員">' + idx.people.map(p => o('p:' + p.name)).join('') + '</optgroup>' +
+      (idx.extra.length ? '<optgroup label="名冊沒登記">' + idx.extra.map(t => o('x:' + t)).join('') + '</optgroup>' : '');
     sel.value = who;
   }
 
   /* ---------- filter ---------- */
   function applyFilter() {
-    const q = filter.trim(), active = !!(q || who), { groups } = roster();
+    const q = filter.trim(), active = !!(q || who), mset = matchSet(rosterIndex());
     $('searchBox').classList.toggle('has', !!q);
     grid.querySelectorAll('mark').forEach(m => m.replaceWith(m.textContent));
     grid.querySelectorAll('.c').forEach(c => c.normalize());
@@ -587,7 +624,7 @@
       let any = false;
       tb.querySelectorAll('tr').forEach(tr => {
         const it = blk.items[+tr.dataset.i];
-        const hit = (!q || blkHit || FIELDS.some(f => String(it[f]).includes(q))) && whoMatch(it, groups);
+        const hit = (!q || blkHit || FIELDS.some(f => String(it[f]).includes(q))) && whoMatch(it, mset);
         tr.classList.toggle('dim', active && !hit);
         tr.classList.toggle('hit', active && hit);
         if (active && hit) hits++;
@@ -648,9 +685,11 @@
     if (brush) { c.blur(); return; }
     if (c.querySelector('mark')) { c.textContent = c.textContent; placeEnd(c); }
     editStart = JSON.stringify(state);
+    updateAC(c);
   });
   grid.addEventListener('focusout', e => {
     const c = e.target.closest('.c'); if (!c) return;
+    if (acCell === c) hideAC();
     if (editStart && editStart !== JSON.stringify(state)) { undoStack.push(editStart); redoStack = []; syncHist(); }
     editStart = null;
     setTimeout(() => {
@@ -676,6 +715,7 @@
     if (!v.trim()) { v = ''; if (c.innerHTML) c.innerHTML = ''; }
     if (i < 0) state.blocks[b][f] = v; else state.blocks[b].items[i][f] = v;
     save();
+    if (f === 'people') updateAC(c);
   });
   grid.addEventListener('paste', e => {
     const c = e.target.closest('.c'); if (!c || !editing) return;
@@ -684,6 +724,7 @@
   });
   grid.addEventListener('keydown', e => {
     const c = e.target.closest('.c'); if (!c) return;
+    if (acKey(e)) return;
     if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); moveDown(c); }
     else if (e.key === 'Escape') c.blur();
   });
@@ -746,6 +787,105 @@
     if (k === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
     else if ((k === 'z' && e.shiftKey) || k === 'y') { e.preventDefault(); redo(); }
   });
+
+  /* ---------- roster dialog ---------- */
+  const dlg = $('roster');
+  function renderRoster() {
+    ensureRoster();
+    $('rosterRows').innerHTML = state.roster.map((p, k) => `<tr data-k="${k}">
+      <td><input data-rf="name" value="${esc(p.name)}" placeholder="名字" aria-label="名字" ${editing ? '' : 'disabled'}></td>
+      <td class="ral"><input data-rf="alias" value="${esc(p.alias)}" placeholder="${p.name ? '' : '例：蔡維宸、維宸'}" aria-label="其他寫法" ${editing ? '' : 'disabled'}></td>
+      <td><input data-rf="group" value="${esc(p.group)}" placeholder="${p.name ? '' : '例：活動組'}" aria-label="組別" ${editing ? '' : 'disabled'}></td>
+      <td><button class="ib del" type="button" data-rdel aria-label="刪除這位">✕</button></td></tr>`).join('');
+    $('rosterAdd').hidden = !editing;
+  }
+  $('openRoster').addEventListener('click', () => { $('more').open = false; renderRoster(); dlg.showModal(); });
+  $('rosterClose').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('close', () => { renderPeople(); applyFilter(); });
+  let rStart = null;
+  $('rosterRows').addEventListener('focusin', e => { if (e.target.matches('input')) rStart = JSON.stringify(state); });
+  $('rosterRows').addEventListener('focusout', e => {
+    if (rStart && rStart !== JSON.stringify(state)) { undoStack.push(rStart); redoStack = []; syncHist(); }
+    rStart = null;
+  });
+  $('rosterRows').addEventListener('input', e => {
+    const inp = e.target.closest('input'); if (!inp || !editing) return;
+    state.roster[+inp.closest('tr').dataset.k][inp.dataset.rf] = inp.value; save();
+  });
+  $('rosterRows').addEventListener('click', e => {
+    if (!e.target.closest('[data-rdel]') || !editing) return;
+    const k = +e.target.closest('tr').dataset.k, p = state.roster[k];
+    if ((p.name || p.alias) && !confirm(`從名冊移除「${p.name || p.alias}」？表格內容不會變。`)) return;
+    snapshot(); state.roster.splice(k, 1); save(); renderRoster();
+  });
+  $('rosterAdd').addEventListener('click', () => {
+    snapshot(); state.roster.push({ name: '', alias: '', group: '' }); save(); renderRoster();
+    $('rosterRows').lastElementChild.querySelector('input').focus();
+  });
+
+  /* ---------- name picker for 人員安排 ---------- */
+  const ac = $('ac'); let acList = [], acIdx = 0, acCell = null, acRange = [0, 0];
+  const SEP = /[\n／/、,，；;：:]/;
+  function caretOffset(el) {
+    const s = getSelection(); if (!s.rangeCount || !el.contains(s.anchorNode)) return el.textContent.length;
+    const r = document.createRange(); r.selectNodeContents(el); r.setEnd(s.getRangeAt(0).endContainer, s.getRangeAt(0).endOffset);
+    return r.toString().length;
+  }
+  function selectRange(el, a, b) {
+    const r = document.createRange(), w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let pos = 0, n, startSet = false;
+    while ((n = w.nextNode())) {
+      if (!startSet && a <= pos + n.length) { r.setStart(n, a - pos); startSet = true; }
+      if (startSet && b <= pos + n.length) { r.setEnd(n, b - pos); break; }
+      pos += n.length;
+    }
+    if (!startSet) { r.selectNodeContents(el); r.collapse(false); }
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+  function hideAC() { ac.hidden = true; acCell = null; }
+  function updateAC(c) {
+    if (!editing || brush || !c || c.dataset.f !== 'people') return hideAC();
+    const text = c.textContent, end = caretOffset(c);
+    let start = end; while (start > 0 && !SEP.test(text[start - 1])) start--;
+    const q = text.slice(start, end).trim();
+    const idx = rosterIndex();
+    let list = [
+      ...[...idx.members.keys()].map(g => ({ label: g, sub: '組別', keys: [g], grp: true })),
+      ...idx.people.map(p => ({ label: p.name, sub: p.groups.join('、'), keys: [...p.keys] }))
+    ];
+    if (q) list = list.filter(x => x.keys.some(k => k.includes(q)) || x.sub.includes(q));
+    if (!list.length || (list.length === 1 && list[0].label === q)) return hideAC();
+    acList = list; acIdx = 0; acCell = c; acRange = [start, end];
+    ac.innerHTML = list.map((x, k) => `<div role="option" data-k="${k}" class="${k === 0 ? 'on' : ''}"><span class="${x.grp ? 'grp' : ''}">${esc(x.label)}</span><small>${esc(x.sub)}</small></div>`).join('');
+    const r = c.getBoundingClientRect();
+    ac.hidden = false;
+    const h = ac.offsetHeight, below = innerHeight - r.bottom > h + 8;
+    ac.style.left = Math.max(8, Math.min(r.left, innerWidth - ac.offsetWidth - 8)) + 'px';
+    ac.style.top = (below ? r.bottom + 4 : Math.max(8, r.top - h - 4)) + 'px';
+  }
+  function pickAC(k) {
+    const x = acList[k], c = acCell; if (!x || !c) return;
+    selectRange(c, acRange[0], acRange[1]);
+    document.execCommand('insertText', false, x.label + (x.grp ? '：' : ''));
+    if (x.grp) updateAC(c); else hideAC();
+  }
+  function acKey(e) {
+    if (ac.hidden || e.isComposing || e.keyCode === 229) return false;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault(); acIdx = (acIdx + (e.key === 'ArrowDown' ? 1 : -1) + acList.length) % acList.length;
+      ac.querySelectorAll('div').forEach((d, k) => d.classList.toggle('on', k === acIdx));
+      ac.children[acIdx].scrollIntoView({ block: 'nearest' }); return true;
+    }
+    if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); pickAC(acIdx); return true; }
+    if (e.key === 'Escape') { e.preventDefault(); hideAC(); return true; }
+    return false;
+  }
+  ac.addEventListener('mousedown', e => e.preventDefault());
+  ac.addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (d) pickAC(+d.dataset.k); });
+  grid.addEventListener('click', e => { const c = e.target.closest('.c'); if (c && editing && !brush) updateAC(c); });
+  wrap.addEventListener('scroll', hideAC);
+  addEventListener('scroll', () => { if (acCell) updateAC(acCell); }, { passive: true });
 
   /* ---------- export ---------- */
   const COLS = ['編號', '時間', '活動名稱', '活動內容', '人員安排', '地點', '器材', '備註'];
