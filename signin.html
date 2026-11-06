@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>瑜珈頌缽報到簽到</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23E2A33A' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23E2A33A'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --ink: #2B2A55; --ink-soft: #4C4B78; --gold: #D8962C; --amber: #9A5B1E; --dusk: #5A5893;
+    --glass-line: rgba(255, 255, 255, .75); --line: rgba(90, 88, 147, .16); --line-strong: rgba(90, 88, 147, .38);
+    --serif: "Noto Serif TC", "Songti TC", "Source Han Serif TC", serif;
+    --sans: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { overflow-x: clip; }
+  body {
+    margin: 0; color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.6;
+    background: linear-gradient(180deg, #FBE3C4 0%, #F6CDB4 22%, #E3C7DA 48%, #C5C2E6 72%, #A9AEDD 100%);
+    background-attachment: fixed; min-height: 100vh;
+  }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  .aura { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .aura span { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .6; animation: drift 30s ease-in-out infinite alternate; }
+  .aura .a1 { width: 60vmax; height: 60vmax; left: -15vmax; top: -20vmax; background: radial-gradient(circle, #FFD99A, transparent 65%); }
+  .aura .a2 { width: 55vmax; height: 55vmax; right: -20vmax; top: 20vh; background: radial-gradient(circle, #F4A9A0, transparent 65%); animation-delay: -8s; }
+  .aura .a3 { width: 65vmax; height: 65vmax; left: 10vw; bottom: -30vmax; background: radial-gradient(circle, #9C9FE0, transparent 65%); animation-delay: -14s; }
+  @keyframes drift { 0% { transform: translate(0,0) scale(1); } 50% { transform: translate(6vw,4vh) scale(1.12); } 100% { transform: translate(-4vw,8vh) scale(.95); } }
+  @media (prefers-reduced-motion: reduce) { .aura span { animation: none; } }
+
+  nav { position: sticky; top: 0; z-index: 20; background: rgba(255, 244, 232, .62); backdrop-filter: blur(14px) saturate(1.3); border-bottom: 1px solid var(--glass-line); }
+  nav .in { max-width: 900px; margin: 0 auto; padding: 0 16px; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  nav a { flex: none; padding: 12px 12px; font-size: 15px; text-decoration: none; color: var(--ink-soft); white-space: nowrap; border-bottom: 2px solid transparent; }
+  nav a:hover { color: var(--gold); }
+  nav a[aria-current] { color: var(--ink); border-bottom-color: var(--gold); font-weight: 600; }
+
+  main { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+  .head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; margin-bottom: 14px; }
+  .kicker { font-family: var(--serif); color: var(--amber); margin: 0; font-size: 15px; }
+  h1 { font-family: var(--serif); font-size: clamp(26px, 3.4vw, 36px); line-height: 1.25; margin: 2px 0 0; letter-spacing: .03em; }
+  .total { font-family: var(--serif); font-size: 17px; color: var(--ink-soft); }
+  .total b { font-size: 30px; color: var(--ink); font-variant-numeric: tabular-nums; margin: 0 4px; }
+  .acts { display: flex; gap: 8px; }
+  .btn { height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--line-strong); background: #fff; cursor: pointer; font-size: 14px; white-space: nowrap; }
+  .btn:hover { border-color: var(--ink); }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .sheet { background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--glass-line); box-shadow: 0 20px 50px -30px rgba(60, 50, 120, .45); }
+  .ptitle { display: none; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  th { background: #EEEAF6; text-align: left; font-weight: 600; font-size: 14px; padding: 9px 12px; border-bottom: 1px solid var(--line-strong); }
+  td { padding: 0 12px; height: 52px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  td.no { font-family: var(--serif); color: var(--dusk); font-variant-numeric: tabular-nums; text-align: center; }
+  th.no { text-align: center; }
+  td.name { font-size: 16.5px; font-weight: 600; }
+  td.tel { font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+  td.by { color: var(--ink-soft); font-size: 14.5px; }
+  td.sign { border-left: 1px dashed var(--line-strong); }
+  tr.walk td.name::after { content: "現場報名"; color: #B5B2CC; font-weight: 400; font-size: 13.5px; }
+  .note { margin: 12px 4px 0; font-size: 13.5px; color: var(--ink-soft); }
+
+  @media (max-width: 600px) {
+    .acts { width: 100%; } .acts .btn { flex: 1; }
+    col.c-by { width: 26% !important; } col.c-tel { width: 0 !important; }
+    th.tel, td.tel { display: none; }
+    td { height: 48px; padding: 0 8px; } th { padding: 8px; }
+  }
+  @media print {
+    @page { size: A4 portrait; margin: 12mm; }
+    nav, .aura, .head, .note { display: none !important; }
+    body { background: #fff; font-size: 12pt; }
+    main { padding: 0; max-width: none; }
+    .sheet { border: 0; box-shadow: none; border-radius: 0; }
+    .ptitle { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4mm; font-family: var(--serif); }
+    .ptitle h2 { margin: 0; font-size: 16pt; }
+    .ptitle span { font-size: 11pt; }
+    th { background: #eee !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border: 1px solid #555; }
+    td { height: 13mm; border: 1px solid #555; }
+    td.sign { border-left: 1px solid #555; }
+    tr { break-inside: avoid; }
+    tr.walk td.name::after { content: ""; }
+  }
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+
+<nav aria-label="頁面切換"><div class="in">
+  <a href="./">工作人員導覽</a>
+  <a href="./flow.html">細流表</a>
+  <a href="./signin.html" aria-current="page">報到簽到</a>
+</div></nav>
+
+<main>
+  <div class="head">
+    <div>
+      <p class="kicker">11/7（六）13:30 報到｜瑜珈頌缽公益療癒體驗</p>
+      <h1>報到簽到表</h1>
+    </div>
+    <div class="total">體驗人員共<b id="total"></b>位</div>
+    <div class="acts">
+      <button class="btn" id="xls" type="button">下載 Excel</button>
+      <button class="btn primary" type="button" onclick="window.print()">列印</button>
+    </div>
+  </div>
+
+  <div class="sheet">
+    <div class="ptitle"><h2>瑜珈頌缽公益療癒體驗　報到簽到表</h2><span>2026/11/7（六）天慧講堂　共 <b id="ptotal"></b> 位</span></div>
+    <table>
+      <colgroup><col style="width:9%"><col style="width:22%"><col class="c-by" style="width:22%"><col class="c-tel" style="width:20%"><col></colgroup>
+      <thead><tr><th class="no">編號</th><th>姓名</th><th>邀約人</th><th class="tel">電話</th><th>簽名</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <p class="note">電話在網頁上只顯示頭尾，完整號碼在活動資料夾的 Excel 檔。最後幾列空白給現場報名的人。</p>
+</main>
+
+<script type="application/json" id="data">
+[
+ ["黃點傳師惠芬","",""],
+ ["陳點傳師怡秀","",""],
+ ["施點傳師欣羽","",""],
+ ["張美瑩","楊惠玲老師","0973-***-765"],
+ ["鄭婷方","","0980-***-675"],
+ ["胡曉莉","","0926-***-648"],
+ ["邱詣文","鄭婷方","0988-***-136"],
+ ["劉妙昭","","0931-***-566"],
+ ["王品云","","0925-***-515"],
+ ["曹振彬","林桂雲","0931-***-849"],
+ ["林桂雲","","0932-***-485"],
+ ["詹淳璽","",""],
+ ["許淑芬","",""],
+ ["林佳穎","維宸",""],
+ ["Mei 玫","臉書報名","0981-***-273"]
+]
+</script>
+<script>
+(() => {
+  const BLANK = 5;
+  const people = JSON.parse(document.getElementById('data').textContent);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const rows = [...people.map(p => ({ name: p[0], by: p[1], tel: p[2] })), ...Array.from({ length: BLANK }, () => ({ name: '', by: '', tel: '', walk: true }))];
+  document.getElementById('rows').innerHTML = rows.map((r, i) =>
+    `<tr class="${r.walk ? 'walk' : ''}"><td class="no">${i + 1}</td><td class="name">${esc(r.name)}</td><td class="by">${esc(r.by)}</td><td class="tel">${esc(r.tel)}</td><td class="sign"></td></tr>`).join('');
+  document.getElementById('total').textContent = document.getElementById('ptotal').textContent = people.length;
+
+  // Excel 2003 XML spreadsheet: opens in Excel / Numbers / Google 試算表, keeps borders and row height
+  document.getElementById('xls').addEventListener('click', () => {
+    const cell = (v, st) => `<Cell ss:StyleID="${st}"><Data ss:Type="${typeof v === 'number' ? 'Number' : 'String'}">${esc(v)}</Data></Cell>`;
+    const body = rows.map((r, i) => `<Row ss:Height="36">${cell(i + 1, 'c')}${cell(r.name, 'b')}${cell(r.by, 'b')}${cell(r.tel, 'b')}${cell('', 'b')}</Row>`).join('');
+    const xml = `<?xml version="1.0" encoding="UTF-8"?><?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+<Styles>
+ <Style ss:ID="t"><Font ss:Size="16" ss:Bold="1"/></Style>
+ <Style ss:ID="h"><Font ss:Bold="1"/><Interior ss:Color="#EEEEEE" ss:Pattern="Solid"/><Alignment ss:Vertical="Center"/><Borders><Border ss:Position="Top" ss:LineStyle="Continuous"/><Border ss:Position="Bottom" ss:LineStyle="Continuous"/><Border ss:Position="Left" ss:LineStyle="Continuous"/><Border ss:Position="Right" ss:LineStyle="Continuous"/></Borders></Style>
+ <Style ss:ID="b"><Alignment ss:Vertical="Center"/><Borders><Border ss:Position="Top" ss:LineStyle="Continuous"/><Border ss:Position="Bottom" ss:LineStyle="Continuous"/><Border ss:Position="Left" ss:LineStyle="Continuous"/><Border ss:Position="Right" ss:LineStyle="Continuous"/></Borders></Style>
+ <Style ss:ID="c" ss:Parent="b"><Alignment ss:Horizontal="Center" ss:Vertical="Center"/></Style>
+</Styles>
+<Worksheet ss:Name="報到簽到"><Table>
+ <Column ss:Width="40"/><Column ss:Width="110"/><Column ss:Width="110"/><Column ss:Width="100"/><Column ss:Width="160"/>
+ <Row ss:Height="28"><Cell ss:StyleID="t" ss:MergeAcross="4"><Data ss:Type="String">瑜珈頌缽公益療癒體驗　報到簽到表　2026/11/7（六）　共 ${people.length} 位</Data></Cell></Row>
+ <Row ss:Height="24">${['編號', '姓名', '邀約人', '電話', '簽名'].map(h => cell(h, 'h')).join('')}</Row>
+ ${body}
+</Table><WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel"><PageSetup><Layout x:Orientation="Portrait" xmlns:x="urn:schemas-microsoft-com:office:excel"/></PageSetup><FitToPage/><Print><FitWidth>1</FitWidth><FitHeight>0</FitHeight><PaperSizeIndex>9</PaperSizeIndex></Print></WorksheetOptions></Worksheet></Workbook>`;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([xml], { type: 'application/vnd.ms-excel' }));
+    a.download = '報到簽到表_1107.xls'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+})();
+</script>
+</body>
+</html>
